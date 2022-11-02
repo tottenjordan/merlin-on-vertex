@@ -1,0 +1,13 @@
+FROM nvcr.io/nvidia/merlin/merlin-tensorflow:22.09
+
+WORKDIR /src
+
+RUN pip install -U pip
+RUN pip install git+https://github.com/NVIDIA-Merlin/models.git
+RUN pip install google-cloud-bigquery gcsfs
+RUN pip install google-cloud-aiplatform[cloud_profiler] kfp
+RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg  add - && apt-get update -y && apt-get install google-cloud-sdk -y
+
+COPY trainer/* ./
+
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/hugectr/lib:/usr/local/cuda/compat/lib:/usr/local/nvidia/lib:/usr/local/nvidia/lib64:/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64:/usr/local/lib:/repos/dist/lib:/opt/tritonserver/lib
