@@ -1,3 +1,4 @@
+
 import argparse
 import json
 import logging
@@ -6,12 +7,25 @@ import sys
 import time
 import pandas as pd
 
+# we can control how much memory to give tensorflow with this environment variable
+# IMPORTANT: make sure you do this before you initialize TF's runtime, otherwise
+# TF will have claimed all free GPU memory
+# os.environ["TF_MEMORY_ALLOCATION"] = "0.3"  # fraction of free memory
+
+# # nvtabular
+# import nvtabular as nvt
+# import nvtabular.ops as ops
+
 # merlin
-from merlin.models.utils.example_utils import workflow_fit_transform
+# from merlin.models.utils.example_utils import workflow_fit_transform
+from merlin.io.dataset import Dataset as MerlinDataset
+from merlin.models.tf.outputs.base import DotProduct, MetricsFn, ModelOutput
 from merlin.schema.tags import Tags
 import merlin.models.tf as mm
-from merlin.io.dataset import Dataset as MerlinDataset
+
 from merlin.models.utils.dataset import unique_rows_by_features
+
+# nvtabular
 import nvtabular as nvt
 import nvtabular.ops as ops
 
@@ -25,10 +39,10 @@ from google.cloud import storage
 from google.cloud.storage.bucket import Bucket
 from google.cloud.storage.blob import Blob
 # import hypertune
-from google.cloud.aiplatform.training_utils import cloud_profiler
+# from google.cloud.aiplatform.training_utils import cloud_profiler
 
 # repo
-from two_tower_model import create_two_tower
+from .two_tower_model import create_two_tower
 # import utils
 
 # local
@@ -51,12 +65,6 @@ def _is_chief(task_type, task_id):
     # return (task_type == 'chief') or (task_type == 'worker' and task_id == 0) or task_type is None
     # return ((task_type == 'chief' and task_id == 0) or task_type is None)
 
-def get_arch_from_string(arch_string):
-    q = arch_string.replace(']', '')
-    q = q.replace('[', '')
-    q = q.replace(" ", "")
-    return [int(x) for x in q.split(',')]
-
 def get_upload_logs_to_manged_tb_command(tb_resource_name, logs_dir, experiment_name, ttl_hrs, oneshot="false"):
     """
     Run this and copy/paste the command into terminal to have 
@@ -74,7 +82,7 @@ def get_upload_logs_to_manged_tb_command(tb_resource_name, logs_dir, experiment_
         --event_file_inactive_secs={60*60*ttl_hrs}"""
     )
 
-def _upload_blob_gcs(gcs_uri, source_file_name, destination_blob_name):
+def _upload_blob_gcs(gcs_uri, source_file_name, destination_blob_name, project):
     """Uploads a file to GCS bucket"""
     client = storage.Client(project=project)
     blob = Blob.from_string(os.path.join(gcs_uri, destination_blob_name))
@@ -108,13 +116,15 @@ def main(args):
     logging.info("vertex_ai initialized...")
     
     EXPERIMENT_NAME = f"{args.experiment_name}"
-    RUN_NAME = f"{args.experiment_run}-{TIMESTAMP}" # f"{args.experiment_run}"
+    RUN_NAME = f"{args.experiment_run}" #-{TIMESTAMP}" # f"{args.experiment_run}"
     logging.info(f"EXPERIMENT_NAME: {EXPERIMENT_NAME}\n RUN_NAME: {RUN_NAME}")
     
-    WORKING_DIR_GCS_URI = f'gs://{args.train_output_bucket}/{EXPERIMENT_NAME}/{RUN_NAME}' 
+    WORKING_DIR_GCS_URI = f'gs://{args.train_output_bucket}/{EXPERIMENT_NAME}/{RUN_NAME}'
+    logging.info(f"WORKING_DIR_GCS_URI: {WORKING_DIR_GCS_URI}")
     
     TB_RESOURCE_NAME = f'{args.tb_name}'
-    LOGS_DIR = f'gs://{args.train_output_bucket}/tb_logs/{EXPERIMENT_NAME}'
+    LOGS_DIR = f'{WORKING_DIR_GCS_URI}/tb_logs'
+    logging.info(f"tensorboard LOGS_DIR: {LOGS_DIR}")
     
     # ====================================================
     # Set Device / GPU Strategy
@@ -210,20 +220,21 @@ def main(args):
     LAYER_SIZES = get_arch_from_string(args.layer_sizes)
     logging.info(f'LAYER_SIZES: {LAYER_SIZES}')
 
-    with strategy.scope():
-        model = create_two_tower(
-            train_dir=args.train_dir,
-            valid_dir=args.valid_dir,
-            workflow_dir=args.workflow_dir,
-            layer_sizes=LAYER_SIZES # args.layer_sizes,
-        )
+    # with strategy.scope():
+    model = create_two_tower(
+        train_dir=args.train_dir,
+        valid_dir=args.valid_dir,
+        workflow_dir=args.workflow_dir,
+        layer_sizes=LAYER_SIZES # args.layer_sizes,
+    )
         
-        model.compile(
-            optimizer=tf.keras.optimizers.Adagrad(args.learning_rate),
-            run_eagerly=False,
-            metrics=[mm.RecallAt(1), mm.RecallAt(10), mm.NDCGAt(10)],
-        )
         
+    model.compile(
+        optimizer=tf.keras.optimizers.Adagrad(args.learning_rate),
+        run_eagerly=False,
+        metrics=[mm.RecallAt(1), mm.RecallAt(10), mm.NDCGAt(10)],
+    )
+    
     # cloud_profiler.init() # managed TB profiler
         
     logging.info('Starting training loop...')
@@ -269,7 +280,7 @@ def main(args):
     
     hyperparams = {}
     hyperparams["epochs"] = int(args.num_epochs)
-    hyperparams["num_gpus"] = num_gpus
+    hyperparams["num_gpus"] = NUM_WORKERS # num_gpus
     hyperparams["per_gpu_batch_size"] = args.per_gpu_batch_size
     hyperparams["global_batch_size"] = GLOBAL_BATCH_SIZE
     hyperparams["learning_rate"] = args.learning_rate
@@ -315,6 +326,10 @@ def main(args):
         query_tower = model.query_encoder
         query_tower.save(QUERY_TOWER_PATH)
         logging.info(f'Saved query tower to {QUERY_TOWER_PATH}')
+        
+        candidate_tower = model.candidate_encoder
+        candidate_tower.save(CANDIDATE_TOWER_PATH)
+        logging.info(f'Saved candidate tower to {CANDIDATE_TOWER_PATH}')
     
     # =============================================
     # save embeddings for ME index
@@ -322,8 +337,16 @@ def main(args):
     EMBEDDINGS_FILE_NAME = "candidate_embeddings.json"
     logging.info(f"Saving {EMBEDDINGS_FILE_NAME} to {EMBEDDINGS_PATH}")
     
+    # def format_for_matching_engine(data) -> None:
+    #     emb = [data[i] for i in range(LAYER_SIZES[-1])] # get the embeddings
+    #     formatted_emb = '{"id":"' + str(data['track_uri_can']) + '","embedding":[' + ",".join(str(x) for x in list(emb)) + ']}'
+    #     with open(f"{EMBEDDINGS_FILE_NAME}", 'a') as f:
+    #         f.write(formatted_emb)
+    #         f.write("\n")
+    
     def format_for_matching_engine(data) -> None:
-        emb = [data[i] for i in range(LAYER_SIZES[-1])] # get the embeddings
+        cols = [str(i) for i in range(LAYER_SIZES[-1])]      # ensure we are only pulling 0-EMBEDDING_DIM cols
+        emb = [data[col] for col in cols]                    # get the embeddings
         formatted_emb = '{"id":"' + str(data['track_uri_can']) + '","embedding":[' + ",".join(str(x) for x in list(emb)) + ']}'
         with open(f"{EMBEDDINGS_FILE_NAME}", 'a') as f:
             f.write(formatted_emb)
@@ -369,6 +392,7 @@ def main(args):
             EMBEDDINGS_PATH, 
             f"{EMBEDDINGS_FILE_NAME}", 
             f"{EMBEDDINGS_FILE_NAME}",
+            args.project
         )
     
     logging.info('All done - model saved') #all done

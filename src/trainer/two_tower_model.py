@@ -1,12 +1,13 @@
+
 from typing import List, Any
 
-from merlin.models.utils.example_utils import workflow_fit_transform
+import nvtabular as nvt
+# # import nvtabular.ops as ops
+
+# from merlin.models.utils.example_utils import workflow_fit_transform
 from merlin.schema.tags import Tags
 import merlin.models.tf as mm
 from merlin.models.tf.outputs.base import DotProduct, MetricsFn, ModelOutput
-
-import nvtabular as nvt
-import nvtabular.ops as ops
 
 import logging
 
@@ -26,7 +27,7 @@ def create_two_tower(
     workflow = nvt.Workflow.load(workflow_dir) # gs://spotify-merlin-v1/nvt-preprocessing-spotify-v24/nvt-analyzed
     
     schema = workflow.output_schema
-    embeddings = ops.get_embedding_sizes(workflow)
+    # embeddings = ops.get_embedding_sizes(workflow)
     
     user_schema = schema.select_by_tag(Tags.USER)
     user_inputs = mm.InputBlockV2(user_schema)
