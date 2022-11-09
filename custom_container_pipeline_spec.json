@@ -1,0 +1,1817 @@
+{
+  "pipelineSpec": {
+    "components": {
+      "comp-build-custom-image": {
+        "executorLabel": "exec-build-custom-image",
+        "inputDefinitions": {
+          "parameters": {
+            "app_dir_name": {
+              "type": "STRING"
+            },
+            "artifact_gcs_path": {
+              "type": "STRING"
+            },
+            "custom_image_uri": {
+              "type": "STRING"
+            },
+            "docker_name": {
+              "type": "STRING"
+            },
+            "project": {
+              "type": "STRING"
+            }
+          }
+        },
+        "outputDefinitions": {
+          "parameters": {
+            "custom_image_uri": {
+              "type": "STRING"
+            }
+          }
+        }
+      },
+      "comp-build-custom-image-2": {
+        "executorLabel": "exec-build-custom-image-2",
+        "inputDefinitions": {
+          "parameters": {
+            "app_dir_name": {
+              "type": "STRING"
+            },
+            "artifact_gcs_path": {
+              "type": "STRING"
+            },
+            "custom_image_uri": {
+              "type": "STRING"
+            },
+            "docker_name": {
+              "type": "STRING"
+            },
+            "project": {
+              "type": "STRING"
+            }
+          }
+        },
+        "outputDefinitions": {
+          "parameters": {
+            "custom_image_uri": {
+              "type": "STRING"
+            }
+          }
+        }
+      },
+      "comp-create-ann-index": {
+        "executorLabel": "exec-create-ann-index",
+        "inputDefinitions": {
+          "parameters": {
+            "ann_index_description": {
+              "type": "STRING"
+            },
+            "ann_index_display_name": {
+              "type": "STRING"
+            },
+            "approximate_neighbors_count": {
+              "type": "INT"
+            },
+            "dimensions": {
+              "type": "INT"
+            },
+            "distance_measure_type": {
+              "type": "STRING"
+            },
+            "emb_index_gcs_uri": {
+              "type": "STRING"
+            },
+            "leaf_node_embedding_count": {
+              "type": "INT"
+            },
+            "leaf_nodes_to_search_percent": {
+              "type": "INT"
+            },
+            "location": {
+              "type": "STRING"
+            },
+            "project": {
+              "type": "STRING"
+            },
+            "version": {
+              "type": "STRING"
+            },
+            "vpc_network_name": {
+              "type": "STRING"
+            }
+          }
+        },
+        "outputDefinitions": {
+          "artifacts": {
+            "ann_index": {
+              "artifactType": {
+                "schemaTitle": "system.Artifact",
+                "schemaVersion": "0.0.1"
+              }
+            }
+          },
+          "parameters": {
+            "ann_index_resource_uri": {
+              "type": "STRING"
+            }
+          }
+        }
+      },
+      "comp-create-ann-index-endpoint-vpc": {
+        "executorLabel": "exec-create-ann-index-endpoint-vpc",
+        "inputDefinitions": {
+          "artifacts": {
+            "ann_index_artifact": {
+              "artifactType": {
+                "schemaTitle": "system.Artifact",
+                "schemaVersion": "0.0.1"
+              }
+            }
+          },
+          "parameters": {
+            "ann_index_endpoint_description": {
+              "type": "STRING"
+            },
+            "ann_index_endpoint_display_name": {
+              "type": "STRING"
+            },
+            "location": {
+              "type": "STRING"
+            },
+            "project": {
+              "type": "STRING"
+            },
+            "project_number": {
+              "type": "STRING"
+            },
+            "version": {
+              "type": "STRING"
+            },
+            "vpc_network_name": {
+              "type": "STRING"
+            }
+          }
+        },
+        "outputDefinitions": {
+          "artifacts": {
+            "ann_index_endpoint": {
+              "artifactType": {
+                "schemaTitle": "system.Artifact",
+                "schemaVersion": "0.0.1"
+              }
+            }
+          },
+          "parameters": {
+            "ann_index_endpoint_display_name": {
+              "type": "STRING"
+            },
+            "ann_index_endpoint_resource_uri": {
+              "type": "STRING"
+            },
+            "vpc_network_resource_uri": {
+              "type": "STRING"
+            }
+          }
+        }
+      },
+      "comp-create-brute-force-index": {
+        "executorLabel": "exec-create-brute-force-index",
+        "inputDefinitions": {
+          "parameters": {
+            "approximate_neighbors_count": {
+              "type": "INT"
+            },
+            "brute_force_index_description": {
+              "type": "STRING"
+            },
+            "brute_force_index_display_name": {
+              "type": "STRING"
+            },
+            "dimensions": {
+              "type": "INT"
+            },
+            "distance_measure_type": {
+              "type": "STRING"
+            },
+            "emb_index_gcs_uri": {
+              "type": "STRING"
+            },
+            "location": {
+              "type": "STRING"
+            },
+            "project": {
+              "type": "STRING"
+            },
+            "version": {
+              "type": "STRING"
+            },
+            "vpc_network_name": {
+              "type": "STRING"
+            }
+          }
+        },
+        "outputDefinitions": {
+          "artifacts": {
+            "brute_force_index": {
+              "artifactType": {
+                "schemaTitle": "system.Artifact",
+                "schemaVersion": "0.0.1"
+              }
+            }
+          },
+          "parameters": {
+            "brute_force_index_resource_uri": {
+              "type": "STRING"
+            }
+          }
+        }
+      },
+      "comp-create-brute-index-endpoint-vpc": {
+        "executorLabel": "exec-create-brute-index-endpoint-vpc",
+        "inputDefinitions": {
+          "artifacts": {
+            "bf_index_artifact": {
+              "artifactType": {
+                "schemaTitle": "system.Artifact",
+                "schemaVersion": "0.0.1"
+              }
+            }
+          },
+          "parameters": {
+            "brute_index_endpoint_description": {
+              "type": "STRING"
+            },
+            "brute_index_endpoint_display_name": {
+              "type": "STRING"
+            },
+            "location": {
+              "type": "STRING"
+            },
+            "project": {
+              "type": "STRING"
+            },
+            "project_number": {
+              "type": "STRING"
+            },
+            "version": {
+              "type": "STRING"
+            },
+            "vpc_network_name": {
+              "type": "STRING"
+            }
+          }
+        },
+        "outputDefinitions": {
+          "artifacts": {
+            "brute_index_endpoint": {
+              "artifactType": {
+                "schemaTitle": "system.Artifact",
+                "schemaVersion": "0.0.1"
+              }
+            }
+          },
+          "parameters": {
+            "brute_index_endpoint_display_name": {
+              "type": "STRING"
+            },
+            "brute_index_endpoint_resource_uri": {
+              "type": "STRING"
+            },
+            "vpc_network_resource_uri": {
+              "type": "STRING"
+            }
+          }
+        }
+      },
+      "comp-deploy-ann-index": {
+        "executorLabel": "exec-deploy-ann-index",
+        "inputDefinitions": {
+          "parameters": {
+            "ann_index_resource_uri": {
+              "type": "STRING"
+            },
+            "deployed_ann_index_name": {
+              "type": "STRING"
+            },
+            "index_endpoint_resource_uri": {
+              "type": "STRING"
+            },
+            "location": {
+              "type": "STRING"
+            },
+            "project": {
+              "type": "STRING"
+            },
+            "version": {
+              "type": "STRING"
+            }
+          }
+        },
+        "outputDefinitions": {
+          "artifacts": {
+            "deployed_ann_index": {
+              "artifactType": {
+                "schemaTitle": "system.Artifact",
+                "schemaVersion": "0.0.1"
+              }
+            }
+          },
+          "parameters": {
+            "ann_index_resource_uri": {
+              "type": "STRING"
+            },
+            "deployed_ann_index_name": {
+              "type": "STRING"
+            },
+            "index_endpoint_resource_uri": {
+              "type": "STRING"
+            }
+          }
+        }
+      },
+      "comp-deploy-brute-index": {
+        "executorLabel": "exec-deploy-brute-index",
+        "inputDefinitions": {
+          "parameters": {
+            "brute_force_index_resource_uri": {
+              "type": "STRING"
+            },
+            "deployed_brute_force_index_name": {
+              "type": "STRING"
+            },
+            "index_endpoint_resource_uri": {
+              "type": "STRING"
+            },
+            "location": {
+              "type": "STRING"
+            },
+            "project": {
+              "type": "STRING"
+            },
+            "version": {
+              "type": "STRING"
+            }
+          }
+        },
+        "outputDefinitions": {
+          "artifacts": {
+            "deployed_brute_force_index": {
+              "artifactType": {
+                "schemaTitle": "system.Artifact",
+                "schemaVersion": "0.0.1"
+              }
+            }
+          },
+          "parameters": {
+            "brute_force_index_resource_uri": {
+              "type": "STRING"
+            },
+            "deployed_brute_force_index_name": {
+              "type": "STRING"
+            },
+            "index_endpoint_resource_uri": {
+              "type": "STRING"
+            }
+          }
+        }
+      },
+      "comp-endpoint-create": {
+        "executorLabel": "exec-endpoint-create",
+        "inputDefinitions": {
+          "parameters": {
+            "description": {
+              "type": "STRING"
+            },
+            "display_name": {
+              "type": "STRING"
+            },
+            "encryption_spec_key_name": {
+              "type": "STRING"
+            },
+            "labels": {
+              "type": "STRING"
+            },
+            "location": {
+              "type": "STRING"
+            },
+            "network": {
+              "type": "STRING"
+            },
+            "project": {
+              "type": "STRING"
+            }
+          }
+        },
+        "outputDefinitions": {
+          "artifacts": {
+            "endpoint": {
+              "artifactType": {
+                "schemaTitle": "google.VertexEndpoint",
+                "schemaVersion": "0.0.1"
+              }
+            }
+          },
+          "parameters": {
+            "gcp_resources": {
+              "type": "STRING"
+            }
+          }
+        }
+      },
+      "comp-importer": {
+        "executorLabel": "exec-importer",
+        "inputDefinitions": {
+          "parameters": {
+            "uri": {
+              "type": "STRING"
+            }
+          }
+        },
+        "outputDefinitions": {
+          "artifacts": {
+            "artifact": {
+              "artifactType": {
+                "schemaTitle": "google.UnmanagedContainerModel",
+                "schemaVersion": "0.0.1"
+              }
+            }
+          }
+        }
+      },
+      "comp-importer-2": {
+        "executorLabel": "exec-importer-2",
+        "inputDefinitions": {
+          "parameters": {
+            "uri": {
+              "type": "STRING"
+            }
+          }
+        },
+        "outputDefinitions": {
+          "artifacts": {
+            "artifact": {
+              "artifactType": {
+                "schemaTitle": "google.UnmanagedContainerModel",
+                "schemaVersion": "0.0.1"
+              }
+            }
+          }
+        }
+      },
+      "comp-model-deploy": {
+        "executorLabel": "exec-model-deploy",
+        "inputDefinitions": {
+          "artifacts": {
+            "endpoint": {
+              "artifactType": {
+                "schemaTitle": "google.VertexEndpoint",
+                "schemaVersion": "0.0.1"
+              }
+            },
+            "model": {
+              "artifactType": {
+                "schemaTitle": "google.VertexModel",
+                "schemaVersion": "0.0.1"
+              }
+            }
+          },
+          "parameters": {
+            "automatic_resources_max_replica_count": {
+              "type": "INT"
+            },
+            "automatic_resources_min_replica_count": {
+              "type": "INT"
+            },
+            "dedicated_resources_accelerator_count": {
+              "type": "INT"
+            },
+            "dedicated_resources_accelerator_type": {
+              "type": "STRING"
+            },
+            "dedicated_resources_machine_type": {
+              "type": "STRING"
+            },
+            "dedicated_resources_max_replica_count": {
+              "type": "INT"
+            },
+            "dedicated_resources_min_replica_count": {
+              "type": "INT"
+            },
+            "deployed_model_display_name": {
+              "type": "STRING"
+            },
+            "disable_container_logging": {
+              "type": "STRING"
+            },
+            "enable_access_logging": {
+              "type": "STRING"
+            },
+            "explanation_metadata": {
+              "type": "STRING"
+            },
+            "explanation_parameters": {
+              "type": "STRING"
+            },
+            "service_account": {
+              "type": "STRING"
+            },
+            "traffic_split": {
+              "type": "STRING"
+            }
+          }
+        },
+        "outputDefinitions": {
+          "parameters": {
+            "gcp_resources": {
+              "type": "STRING"
+            }
+          }
+        }
+      },
+      "comp-train-merlin": {
+        "executorLabel": "exec-train-merlin",
+        "inputDefinitions": {
+          "parameters": {
+            "batch_size": {
+              "type": "INT"
+            },
+            "experiment_name": {
+              "type": "STRING"
+            },
+            "experiment_run": {
+              "type": "STRING"
+            },
+            "location": {
+              "type": "STRING"
+            },
+            "project": {
+              "type": "STRING"
+            },
+            "service_account": {
+              "type": "STRING"
+            },
+            "tb_resource": {
+              "type": "STRING"
+            },
+            "train_dir": {
+              "type": "STRING"
+            },
+            "train_epochs": {
+              "type": "INT"
+            },
+            "train_image_uri": {
+              "type": "STRING"
+            },
+            "valid_dir": {
+              "type": "STRING"
+            },
+            "version": {
+              "type": "STRING"
+            },
+            "workflow_dir": {
+              "type": "STRING"
+            }
+          }
+        },
+        "outputDefinitions": {
+          "parameters": {
+            "candidate_embeddings_gcs_uri": {
+              "type": "STRING"
+            },
+            "candidate_tower_gcs_uri": {
+              "type": "STRING"
+            },
+            "merlin_model_gcs_dir": {
+              "type": "STRING"
+            },
+            "query_tower_gcs_dir": {
+              "type": "STRING"
+            }
+          }
+        }
+      },
+      "comp-upload-custom-model": {
+        "executorLabel": "exec-upload-custom-model",
+        "inputDefinitions": {
+          "artifacts": {
+            "unmanaged_container_model": {
+              "artifactType": {
+                "schemaTitle": "system.Artifact",
+                "schemaVersion": "0.0.1"
+              }
+            }
+          },
+          "parameters": {
+            "artifact_uri": {
+              "type": "STRING"
+            },
+            "display_name": {
+              "type": "STRING"
+            },
+            "location": {
+              "type": "STRING"
+            },
+            "project": {
+              "type": "STRING"
+            },
+            "serving_container_image_uri": {
+              "type": "STRING"
+            },
+            "version": {
+              "type": "STRING"
+            }
+          }
+        },
+        "outputDefinitions": {
+          "artifacts": {
+            "model": {
+              "artifactType": {
+                "schemaTitle": "system.Artifact",
+                "schemaVersion": "0.0.1"
+              }
+            }
+          },
+          "parameters": {
+            "model_resource_name": {
+              "type": "STRING"
+            }
+          }
+        }
+      }
+    },
+    "deploymentSpec": {
+      "executors": {
+        "exec-build-custom-image": {
+          "container": {
+            "args": [
+              "--executor_input",
+              "{{$}}",
+              "--function_to_execute",
+              "build_custom_image"
+            ],
+            "command": [
+              "sh",
+              "-c",
+              "\nif ! [ -x \"$(command -v pip)\" ]; then\n    python3 -m ensurepip || python3 -m ensurepip --user || apt-get install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1 python3 -m pip install --quiet     --no-warn-script-location 'google-cloud-build' 'kfp==1.8.14' && \"$0\" \"$@\"\n",
+              "sh",
+              "-ec",
+              "program_path=$(mktemp -d)\nprintf \"%s\" \"$0\" > \"$program_path/ephemeral_component.py\"\npython3 -m kfp.v2.components.executor_main                         --component_module_path                         \"$program_path/ephemeral_component.py\"                         \"$@\"\n",
+              "\nimport kfp\nfrom kfp.v2 import dsl\nfrom kfp.v2.dsl import *\nfrom typing import *\n\ndef build_custom_image(\n    project: str,\n    artifact_gcs_path: str,\n    docker_name: str,\n    app_dir_name: str,\n    custom_image_uri: str,\n) -> NamedTuple('Outputs', [\n    ('custom_image_uri', str),\n]):\n    # TODO: make output Artifact for image_uri\n    \"\"\"\n    custom pipeline component to build custom image using\n    Cloud Build, the training/serving application code, and dependencies\n    defined in the Dockerfile\n    \"\"\"\n\n    import logging\n    import os\n\n    from google.cloud.devtools import cloudbuild_v1 as cloudbuild\n    from google.protobuf.duration_pb2 import Duration\n\n    # initialize client for cloud build\n    logging.getLogger().setLevel(logging.INFO)\n    build_client = cloudbuild.services.cloud_build.CloudBuildClient()\n\n    # parse step inputs to get path to Dockerfile and training application code\n    _gcs_dockerfile_path = os.path.join(artifact_gcs_path, f\"{docker_name}\") # Dockerfile.XXXXX\n    _gcs_script_dir_path = os.path.join(artifact_gcs_path, f\"{app_dir_name}/\") # \"trainer/\"\n\n    logging.info(f\"_gcs_dockerfile_path: {_gcs_dockerfile_path}\")\n    logging.info(f\"_gcs_script_dir_path: {_gcs_script_dir_path}\")\n\n    # define build steps to pull the training code and Dockerfile\n    # and build/push the custom training container image\n    build = cloudbuild.Build()\n    build.steps = [\n        {\n            \"name\": \"gcr.io/cloud-builders/gsutil\",\n            \"args\": [\"cp\", \"-r\", _gcs_script_dir_path, \".\"],\n        },\n        {\n            \"name\": \"gcr.io/cloud-builders/gsutil\",\n            \"args\": [\"cp\", _gcs_dockerfile_path, \"Dockerfile\"],\n        },\n        # enabling Kaniko cache in a Docker build that caches intermediate\n        # layers and pushes image automatically to Container Registry\n        # https://cloud.google.com/build/docs/kaniko-cache\n        # {\n        #     \"name\": \"gcr.io/kaniko-project/executor:latest\",\n        #     # \"name\": \"gcr.io/kaniko-project/executor:v1.8.0\",        # TODO; downgraded to avoid error in build\n        #     # \"args\": [f\"--destination={training_image_uri}\", \"--cache=true\"],\n        #     \"args\": [f\"--destination={training_image_uri}\", \"--cache=false\"],\n        # },\n        {\n            \"name\": \"gcr.io/cloud-builders/docker\",\n            \"args\": ['build','-t', f'{custom_image_uri}', '.'],\n        },\n        {\n            \"name\": \"gcr.io/cloud-builders/docker\",\n            \"args\": ['push', f'{custom_image_uri}'], \n        },\n    ]\n    # override default timeout of 10min\n    timeout = Duration()\n    timeout.seconds = 7200\n    build.timeout = timeout\n\n    # create build\n    operation = build_client.create_build(project_id=project, build=build)\n    logging.info(\"IN PROGRESS:\")\n    logging.info(operation.metadata)\n\n    # get build status\n    result = operation.result()\n    logging.info(\"RESULT:\", result.status)\n\n    # return step outputs\n    return (\n        custom_image_uri,\n    )\n\n"
+            ],
+            "image": "gcr.io/google.com/cloudsdktool/cloud-sdk:latest"
+          }
+        },
+        "exec-build-custom-image-2": {
+          "container": {
+            "args": [
+              "--executor_input",
+              "{{$}}",
+              "--function_to_execute",
+              "build_custom_image"
+            ],
+            "command": [
+              "sh",
+              "-c",
+              "\nif ! [ -x \"$(command -v pip)\" ]; then\n    python3 -m ensurepip || python3 -m ensurepip --user || apt-get install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1 python3 -m pip install --quiet     --no-warn-script-location 'google-cloud-build' 'kfp==1.8.14' && \"$0\" \"$@\"\n",
+              "sh",
+              "-ec",
+              "program_path=$(mktemp -d)\nprintf \"%s\" \"$0\" > \"$program_path/ephemeral_component.py\"\npython3 -m kfp.v2.components.executor_main                         --component_module_path                         \"$program_path/ephemeral_component.py\"                         \"$@\"\n",
+              "\nimport kfp\nfrom kfp.v2 import dsl\nfrom kfp.v2.dsl import *\nfrom typing import *\n\ndef build_custom_image(\n    project: str,\n    artifact_gcs_path: str,\n    docker_name: str,\n    app_dir_name: str,\n    custom_image_uri: str,\n) -> NamedTuple('Outputs', [\n    ('custom_image_uri', str),\n]):\n    # TODO: make output Artifact for image_uri\n    \"\"\"\n    custom pipeline component to build custom image using\n    Cloud Build, the training/serving application code, and dependencies\n    defined in the Dockerfile\n    \"\"\"\n\n    import logging\n    import os\n\n    from google.cloud.devtools import cloudbuild_v1 as cloudbuild\n    from google.protobuf.duration_pb2 import Duration\n\n    # initialize client for cloud build\n    logging.getLogger().setLevel(logging.INFO)\n    build_client = cloudbuild.services.cloud_build.CloudBuildClient()\n\n    # parse step inputs to get path to Dockerfile and training application code\n    _gcs_dockerfile_path = os.path.join(artifact_gcs_path, f\"{docker_name}\") # Dockerfile.XXXXX\n    _gcs_script_dir_path = os.path.join(artifact_gcs_path, f\"{app_dir_name}/\") # \"trainer/\"\n\n    logging.info(f\"_gcs_dockerfile_path: {_gcs_dockerfile_path}\")\n    logging.info(f\"_gcs_script_dir_path: {_gcs_script_dir_path}\")\n\n    # define build steps to pull the training code and Dockerfile\n    # and build/push the custom training container image\n    build = cloudbuild.Build()\n    build.steps = [\n        {\n            \"name\": \"gcr.io/cloud-builders/gsutil\",\n            \"args\": [\"cp\", \"-r\", _gcs_script_dir_path, \".\"],\n        },\n        {\n            \"name\": \"gcr.io/cloud-builders/gsutil\",\n            \"args\": [\"cp\", _gcs_dockerfile_path, \"Dockerfile\"],\n        },\n        # enabling Kaniko cache in a Docker build that caches intermediate\n        # layers and pushes image automatically to Container Registry\n        # https://cloud.google.com/build/docs/kaniko-cache\n        # {\n        #     \"name\": \"gcr.io/kaniko-project/executor:latest\",\n        #     # \"name\": \"gcr.io/kaniko-project/executor:v1.8.0\",        # TODO; downgraded to avoid error in build\n        #     # \"args\": [f\"--destination={training_image_uri}\", \"--cache=true\"],\n        #     \"args\": [f\"--destination={training_image_uri}\", \"--cache=false\"],\n        # },\n        {\n            \"name\": \"gcr.io/cloud-builders/docker\",\n            \"args\": ['build','-t', f'{custom_image_uri}', '.'],\n        },\n        {\n            \"name\": \"gcr.io/cloud-builders/docker\",\n            \"args\": ['push', f'{custom_image_uri}'], \n        },\n    ]\n    # override default timeout of 10min\n    timeout = Duration()\n    timeout.seconds = 7200\n    build.timeout = timeout\n\n    # create build\n    operation = build_client.create_build(project_id=project, build=build)\n    logging.info(\"IN PROGRESS:\")\n    logging.info(operation.metadata)\n\n    # get build status\n    result = operation.result()\n    logging.info(\"RESULT:\", result.status)\n\n    # return step outputs\n    return (\n        custom_image_uri,\n    )\n\n"
+            ],
+            "image": "gcr.io/google.com/cloudsdktool/cloud-sdk:latest"
+          }
+        },
+        "exec-create-ann-index": {
+          "container": {
+            "args": [
+              "--executor_input",
+              "{{$}}",
+              "--function_to_execute",
+              "create_ann_index"
+            ],
+            "command": [
+              "sh",
+              "-c",
+              "\nif ! [ -x \"$(command -v pip)\" ]; then\n    python3 -m ensurepip || python3 -m ensurepip --user || apt-get install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1 python3 -m pip install --quiet     --no-warn-script-location 'google-cloud-aiplatform==1.18.1' 'kfp==1.8.14' && \"$0\" \"$@\"\n",
+              "sh",
+              "-ec",
+              "program_path=$(mktemp -d)\nprintf \"%s\" \"$0\" > \"$program_path/ephemeral_component.py\"\npython3 -m kfp.v2.components.executor_main                         --component_module_path                         \"$program_path/ephemeral_component.py\"                         \"$@\"\n",
+              "\nimport kfp\nfrom kfp.v2 import dsl\nfrom kfp.v2.dsl import *\nfrom typing import *\n\ndef create_ann_index(\n    project: str,\n    location: str,\n    version: str, \n    vpc_network_name: str,\n    emb_index_gcs_uri: str,\n    dimensions: int,\n    ann_index_display_name: str,\n    approximate_neighbors_count: int,\n    distance_measure_type: str,\n    leaf_node_embedding_count: int,\n    leaf_nodes_to_search_percent: int, \n    ann_index_description: str,\n    # ann_index_labels: Dict, \n) -> NamedTuple('Outputs', [\n    ('ann_index_resource_uri', str),\n    ('ann_index', Artifact),\n]):\n    import logging\n    from google.cloud import aiplatform as vertex_ai\n    from datetime import datetime\n    import time\n\n    vertex_ai.init(\n        project=project,\n        location=location,\n    )\n\n    TIMESTAMP = datetime.now().strftime(\"%Y%m%d%H%M%S\")\n\n    ENDPOINT = \"{}-aiplatform.googleapis.com\".format(location)\n    NETWORK_NAME = vpc_network_name\n    INDEX_DIR_GCS = emb_index_gcs_uri\n    PARENT = \"projects/{}/locations/{}\".format(project, location)\n\n    logging.info(f\"ENDPOINT: {ENDPOINT}\")\n    logging.info(f\"project: {project}\")\n    logging.info(f\"location: {location}\")\n    logging.info(f\"INDEX_DIR_GCS: {INDEX_DIR_GCS}\")\n\n    # ==============================================================================\n    # Create Index \n    # ==============================================================================\n\n    start = time.time()\n\n    tree_ah_index = vertex_ai.MatchingEngineIndex.create_tree_ah_index(\n        display_name=f'{ann_index_display_name}-{TIMESTAMP}',\n        contents_delta_uri=f'{emb_index_gcs_uri}/', # emb_index_gcs_uri,\n        dimensions=dimensions,\n        approximate_neighbors_count=approximate_neighbors_count,\n        distance_measure_type=distance_measure_type,\n        leaf_node_embedding_count=leaf_node_embedding_count,\n        leaf_nodes_to_search_percent=leaf_nodes_to_search_percent,\n        description=ann_index_description,\n        # labels=ann_index_labels,\n        # sync=True,\n    )\n\n    end = time.time()\n    elapsed_time = round((end - start), 2)\n    logging.info(f'Elapsed time creating index: {elapsed_time} seconds\\n')\n\n    ann_index_resource_uri = tree_ah_index.resource_name\n    logging.info(\"ann_index_resource_uri:\", ann_index_resource_uri) \n\n    return (\n      f'{ann_index_resource_uri}',\n      tree_ah_index,\n    )\n\n"
+            ],
+            "image": "python:3.9"
+          }
+        },
+        "exec-create-ann-index-endpoint-vpc": {
+          "container": {
+            "args": [
+              "--executor_input",
+              "{{$}}",
+              "--function_to_execute",
+              "create_ann_index_endpoint_vpc"
+            ],
+            "command": [
+              "sh",
+              "-c",
+              "\nif ! [ -x \"$(command -v pip)\" ]; then\n    python3 -m ensurepip || python3 -m ensurepip --user || apt-get install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1 python3 -m pip install --quiet     --no-warn-script-location 'google-cloud-aiplatform==1.18.1' 'kfp==1.8.14' && \"$0\" \"$@\"\n",
+              "sh",
+              "-ec",
+              "program_path=$(mktemp -d)\nprintf \"%s\" \"$0\" > \"$program_path/ephemeral_component.py\"\npython3 -m kfp.v2.components.executor_main                         --component_module_path                         \"$program_path/ephemeral_component.py\"                         \"$@\"\n",
+              "\nimport kfp\nfrom kfp.v2 import dsl\nfrom kfp.v2.dsl import *\nfrom typing import *\n\ndef create_ann_index_endpoint_vpc(\n    ann_index_artifact: Input[Artifact],\n    project: str,\n    project_number: str,\n    location: str,\n    version: str,\n    vpc_network_name: str,\n    ann_index_endpoint_display_name: str,\n    ann_index_endpoint_description: str,\n) -> NamedTuple('Outputs', [\n    ('vpc_network_resource_uri', str),\n    ('ann_index_endpoint_resource_uri', str),\n    ('ann_index_endpoint', Artifact),\n    ('ann_index_endpoint_display_name', str),\n]):\n\n    import logging\n    from google.cloud import aiplatform as vertex_ai\n    from datetime import datetime\n    import time\n\n    vertex_ai.init(\n        project=project,\n        location=location,\n    )\n\n    TIMESTAMP = datetime.now().strftime(\"%Y%m%d%H%M%S\")\n\n    vpc_network_resource_uri = f'projects/{project_number}/global/networks/{vpc_network_name}'\n    logging.info(f\"vpc_network_resource_uri: {vpc_network_resource_uri}\")\n\n    ann_index_endpoint = vertex_ai.MatchingEngineIndexEndpoint.create(\n        display_name=f'{ann_index_endpoint_display_name}',\n        description=ann_index_endpoint_description,\n        network=vpc_network_resource_uri,\n    )\n    ann_index_endpoint_resource_uri = ann_index_endpoint.resource_name\n    logging.info(f\"ann_index_endpoint_resource_uri: {ann_index_endpoint_resource_uri}\")\n\n    return (\n        f'{vpc_network_resource_uri}',\n        f'{ann_index_endpoint_resource_uri}',\n        ann_index_endpoint,\n        f'{ann_index_endpoint_display_name}'\n    )\n\n"
+            ],
+            "image": "python:3.9"
+          }
+        },
+        "exec-create-brute-force-index": {
+          "container": {
+            "args": [
+              "--executor_input",
+              "{{$}}",
+              "--function_to_execute",
+              "create_brute_force_index"
+            ],
+            "command": [
+              "sh",
+              "-c",
+              "\nif ! [ -x \"$(command -v pip)\" ]; then\n    python3 -m ensurepip || python3 -m ensurepip --user || apt-get install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1 python3 -m pip install --quiet     --no-warn-script-location 'google-cloud-aiplatform==1.18.1' 'kfp==1.8.14' && \"$0\" \"$@\"\n",
+              "sh",
+              "-ec",
+              "program_path=$(mktemp -d)\nprintf \"%s\" \"$0\" > \"$program_path/ephemeral_component.py\"\npython3 -m kfp.v2.components.executor_main                         --component_module_path                         \"$program_path/ephemeral_component.py\"                         \"$@\"\n",
+              "\nimport kfp\nfrom kfp.v2 import dsl\nfrom kfp.v2.dsl import *\nfrom typing import *\n\ndef create_brute_force_index(\n    project: str,\n    location: str,\n    version: str,\n    vpc_network_name: str,\n    emb_index_gcs_uri: str,\n    dimensions: int,\n    brute_force_index_display_name: str,\n    approximate_neighbors_count: int,\n    distance_measure_type: str,\n    brute_force_index_description: str,\n    # brute_force_index_labels: Dict,\n) -> NamedTuple('Outputs', [\n    ('brute_force_index_resource_uri', str),\n    ('brute_force_index', Artifact),\n]):\n\n    import logging\n    from google.cloud import aiplatform as vertex_ai\n    from datetime import datetime\n    import time\n\n    vertex_ai.init(\n        project=project,\n        location=location,\n    )\n\n    TIMESTAMP = datetime.now().strftime(\"%Y%m%d%H%M%S\")\n\n    ENDPOINT = \"{}-aiplatform.googleapis.com\".format(location)\n    NETWORK_NAME = vpc_network_name\n    INDEX_DIR_GCS = emb_index_gcs_uri\n    PARENT = \"projects/{}/locations/{}\".format(project, location)\n\n    logging.info(\"ENDPOINT: {}\".format(ENDPOINT))\n    logging.info(\"PROJECT_ID: {}\".format(project))\n    logging.info(\"REGION: {}\".format(location))\n\n    # ==============================================================================\n    # Create Index \n    # ==============================================================================\n\n    start = time.time()\n\n    brute_force_index = vertex_ai.MatchingEngineIndex.create_brute_force_index(\n        display_name=f'{brute_force_index_display_name}-{TIMESTAMP}',\n        contents_delta_uri=f'{emb_index_gcs_uri}/', # emb_index_gcs_uri,\n        dimensions=dimensions,\n        # approximate_neighbors_count=approximate_neighbors_count,\n        distance_measure_type=distance_measure_type,\n        description=brute_force_index_description,\n        # labels=brute_force_index_labels,\n        # sync=True,\n    )\n    brute_force_index_resource_uri = brute_force_index.resource_name\n    print(\"brute_force_index_resource_uri:\",brute_force_index_resource_uri) \n\n    return (\n      f'{brute_force_index_resource_uri}',\n      brute_force_index,\n    )\n\n"
+            ],
+            "image": "python:3.9"
+          }
+        },
+        "exec-create-brute-index-endpoint-vpc": {
+          "container": {
+            "args": [
+              "--executor_input",
+              "{{$}}",
+              "--function_to_execute",
+              "create_brute_index_endpoint_vpc"
+            ],
+            "command": [
+              "sh",
+              "-c",
+              "\nif ! [ -x \"$(command -v pip)\" ]; then\n    python3 -m ensurepip || python3 -m ensurepip --user || apt-get install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1 python3 -m pip install --quiet     --no-warn-script-location 'google-cloud-aiplatform==1.18.1' 'kfp==1.8.14' && \"$0\" \"$@\"\n",
+              "sh",
+              "-ec",
+              "program_path=$(mktemp -d)\nprintf \"%s\" \"$0\" > \"$program_path/ephemeral_component.py\"\npython3 -m kfp.v2.components.executor_main                         --component_module_path                         \"$program_path/ephemeral_component.py\"                         \"$@\"\n",
+              "\nimport kfp\nfrom kfp.v2 import dsl\nfrom kfp.v2.dsl import *\nfrom typing import *\n\ndef create_brute_index_endpoint_vpc(\n    bf_index_artifact: Input[Artifact],\n    project: str,\n    project_number: str,\n    location: str,\n    version: str,\n    vpc_network_name: str,\n    brute_index_endpoint_display_name: str,\n    brute_index_endpoint_description: str,\n) -> NamedTuple('Outputs', [\n    ('vpc_network_resource_uri', str),\n    ('brute_index_endpoint_resource_uri', str),\n    ('brute_index_endpoint', Artifact),\n    ('brute_index_endpoint_display_name', str),\n]):\n\n    import logging\n    from google.cloud import aiplatform as vertex_ai\n    from datetime import datetime\n    import time\n\n    vertex_ai.init(\n        project=project,\n        location=location,\n    )\n\n    TIMESTAMP = datetime.now().strftime(\"%Y%m%d%H%M%S\")\n\n    vpc_network_resource_uri = f'projects/{project_number}/global/networks/{vpc_network_name}'\n    logging.info(f\"vpc_network_resource_uri: {vpc_network_resource_uri}\")\n\n    brute_index_endpoint = vertex_ai.MatchingEngineIndexEndpoint.create(\n        display_name=f'{brute_index_endpoint_display_name}',\n        description=brute_index_endpoint_description,\n        network=vpc_network_resource_uri,\n    )\n    brute_index_endpoint_resource_uri = brute_index_endpoint.resource_name\n    logging.info(f\"brute_index_endpoint_resource_uri: {brute_index_endpoint_resource_uri}\")\n\n    return (\n      f'{vpc_network_resource_uri}',\n      f'{brute_index_endpoint_resource_uri}',\n      brute_index_endpoint,\n      f'{brute_index_endpoint_display_name}'\n    )\n\n"
+            ],
+            "image": "python:3.9"
+          }
+        },
+        "exec-deploy-ann-index": {
+          "container": {
+            "args": [
+              "--executor_input",
+              "{{$}}",
+              "--function_to_execute",
+              "deploy_ann_index"
+            ],
+            "command": [
+              "sh",
+              "-c",
+              "\nif ! [ -x \"$(command -v pip)\" ]; then\n    python3 -m ensurepip || python3 -m ensurepip --user || apt-get install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1 python3 -m pip install --quiet     --no-warn-script-location 'google-cloud-aiplatform==1.18.1' 'kfp==1.8.14' && \"$0\" \"$@\"\n",
+              "sh",
+              "-ec",
+              "program_path=$(mktemp -d)\nprintf \"%s\" \"$0\" > \"$program_path/ephemeral_component.py\"\npython3 -m kfp.v2.components.executor_main                         --component_module_path                         \"$program_path/ephemeral_component.py\"                         \"$@\"\n",
+              "\nimport kfp\nfrom kfp.v2 import dsl\nfrom kfp.v2.dsl import *\nfrom typing import *\n\ndef deploy_ann_index(\n    project: str,\n    location: str,\n    version: str,\n    deployed_ann_index_name: str,\n    ann_index_resource_uri: str,\n    index_endpoint_resource_uri: str,\n) -> NamedTuple('Outputs', [\n    ('index_endpoint_resource_uri', str),\n    ('ann_index_resource_uri', str),\n    ('deployed_ann_index_name', str),\n    ('deployed_ann_index', Artifact),\n]):\n\n    import logging\n    from google.cloud import aiplatform as vertex_ai\n    from datetime import datetime\n    import time\n\n    vertex_ai.init(\n        project=project,\n        location=location,\n    )\n    TIMESTAMP = datetime.now().strftime(\"%Y%m%d%H%M%S\")\n    VERSION = version\n\n    ann_index = vertex_ai.MatchingEngineIndex(\n      index_name=ann_index_resource_uri\n    )\n    ann_index_resource_uri = ann_index.resource_name\n\n    index_endpoint = vertex_ai.MatchingEngineIndexEndpoint(\n      index_endpoint_resource_uri\n    )\n\n    index_endpoint = index_endpoint.deploy_index(\n      index=ann_index, \n      deployed_index_id=f'{deployed_ann_index_name}' #-{TIMESTAMP}'\n    )\n\n    logging.info(f\"index_endpoint.deployed_indexes: {index_endpoint.deployed_indexes}\")\n\n    return (\n      f'{index_endpoint_resource_uri}',\n      f'{ann_index_resource_uri}',\n      f'{deployed_ann_index_name}',\n      ann_index,\n    )\n\n"
+            ],
+            "image": "python:3.9"
+          }
+        },
+        "exec-deploy-brute-index": {
+          "container": {
+            "args": [
+              "--executor_input",
+              "{{$}}",
+              "--function_to_execute",
+              "deploy_brute_index"
+            ],
+            "command": [
+              "sh",
+              "-c",
+              "\nif ! [ -x \"$(command -v pip)\" ]; then\n    python3 -m ensurepip || python3 -m ensurepip --user || apt-get install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1 python3 -m pip install --quiet     --no-warn-script-location 'google-cloud-aiplatform==1.18.1' 'kfp==1.8.14' && \"$0\" \"$@\"\n",
+              "sh",
+              "-ec",
+              "program_path=$(mktemp -d)\nprintf \"%s\" \"$0\" > \"$program_path/ephemeral_component.py\"\npython3 -m kfp.v2.components.executor_main                         --component_module_path                         \"$program_path/ephemeral_component.py\"                         \"$@\"\n",
+              "\nimport kfp\nfrom kfp.v2 import dsl\nfrom kfp.v2.dsl import *\nfrom typing import *\n\ndef deploy_brute_index(\n    project: str,\n    location: str,\n    version: str,\n    deployed_brute_force_index_name: str,\n    brute_force_index_resource_uri: str,\n    index_endpoint_resource_uri: str,\n) -> NamedTuple('Outputs', [\n    ('index_endpoint_resource_uri', str),\n    ('brute_force_index_resource_uri', str),\n    ('deployed_brute_force_index_name', str),\n    ('deployed_brute_force_index', Artifact),\n]):\n\n    import logging\n    from google.cloud import aiplatform as vertex_ai\n    from datetime import datetime\n    import time\n\n    vertex_ai.init(\n        project=project,\n        location=location,\n    )\n    TIMESTAMP = datetime.now().strftime(\"%Y%m%d%H%M%S\")\n\n    brute_index = vertex_ai.MatchingEngineIndex(\n        index_name=brute_force_index_resource_uri\n    )\n    brute_force_index_resource_uri = brute_index.resource_name\n\n    index_endpoint = vertex_ai.MatchingEngineIndexEndpoint(index_endpoint_resource_uri)\n\n    index_endpoint = index_endpoint.deploy_index(\n        index=brute_index, \n        deployed_index_id=f'{deployed_brute_force_index_name}', #-{TIMESTAMP}'\n    )\n\n    logging.info(f\"index_endpoint.deployed_indexes: {index_endpoint.deployed_indexes}\")\n\n    return (\n      f'{index_endpoint_resource_uri}',\n      f'{brute_force_index_resource_uri}',\n      f'{deployed_brute_force_index_name}', #-{TIMESTAMP}',\n      brute_index,\n    )\n\n"
+            ],
+            "image": "python:3.9"
+          }
+        },
+        "exec-endpoint-create": {
+          "container": {
+            "args": [
+              "--type",
+              "CreateEndpoint",
+              "--payload",
+              "{\"display_name\": \"{{$.inputs.parameters['display_name']}}\", \"description\": \"{{$.inputs.parameters['description']}}\", \"labels\": {{$.inputs.parameters['labels']}}, \"encryption_spec\": {\"kms_key_name\":\"{{$.inputs.parameters['encryption_spec_key_name']}}\"}, \"network\": \"{{$.inputs.parameters['network']}}\"}",
+              "--project",
+              "{{$.inputs.parameters['project']}}",
+              "--location",
+              "{{$.inputs.parameters['location']}}",
+              "--gcp_resources",
+              "{{$.outputs.parameters['gcp_resources'].output_file}}",
+              "--executor_input",
+              "{{$}}"
+            ],
+            "command": [
+              "python3",
+              "-u",
+              "-m",
+              "google_cloud_pipeline_components.container.v1.endpoint.create_endpoint.launcher"
+            ],
+            "image": "gcr.io/ml-pipeline/google-cloud-pipeline-components:1.0.26"
+          }
+        },
+        "exec-importer": {
+          "importer": {
+            "artifactUri": {
+              "runtimeParameter": "uri"
+            },
+            "typeSchema": {
+              "schemaTitle": "google.UnmanagedContainerModel",
+              "schemaVersion": "0.0.1"
+            }
+          }
+        },
+        "exec-importer-2": {
+          "importer": {
+            "artifactUri": {
+              "runtimeParameter": "uri"
+            },
+            "typeSchema": {
+              "schemaTitle": "google.UnmanagedContainerModel",
+              "schemaVersion": "0.0.1"
+            }
+          }
+        },
+        "exec-model-deploy": {
+          "container": {
+            "args": [
+              "--type",
+              "DeployModel",
+              "--payload",
+              "{\"endpoint\": \"{{$.inputs.artifacts['endpoint'].metadata['resourceName']}}\", \"traffic_split\": {{$.inputs.parameters['traffic_split']}}, \"deployed_model\": {\"model\": \"{{$.inputs.artifacts['model'].metadata['resourceName']}}\", \"dedicated_resources\": {\"machine_spec\": {\"machine_type\": \"{{$.inputs.parameters['dedicated_resources_machine_type']}}\", \"accelerator_type\": \"{{$.inputs.parameters['dedicated_resources_accelerator_type']}}\", \"accelerator_count\": {{$.inputs.parameters['dedicated_resources_accelerator_count']}}}, \"min_replica_count\": {{$.inputs.parameters['dedicated_resources_min_replica_count']}}, \"max_replica_count\": {{$.inputs.parameters['dedicated_resources_max_replica_count']}}}, \"automatic_resources\": {\"min_replica_count\": {{$.inputs.parameters['automatic_resources_min_replica_count']}}, \"max_replica_count\": {{$.inputs.parameters['automatic_resources_max_replica_count']}}}, \"service_account\": \"{{$.inputs.parameters['service_account']}}\", \"disable_container_logging\": {{$.inputs.parameters['disable_container_logging']}}, \"enable_access_logging\": {{$.inputs.parameters['enable_access_logging']}}, \"explanation_spec\": {\"parameters\": {{$.inputs.parameters['explanation_parameters']}}, \"metadata\": {{$.inputs.parameters['explanation_metadata']}}}}}",
+              "--project",
+              "",
+              "--location",
+              "",
+              "--gcp_resources",
+              "{{$.outputs.parameters['gcp_resources'].output_file}}"
+            ],
+            "command": [
+              "python3",
+              "-u",
+              "-m",
+              "google_cloud_pipeline_components.container.v1.endpoint.deploy_model.launcher"
+            ],
+            "image": "gcr.io/ml-pipeline/google-cloud-pipeline-components:1.0.26"
+          }
+        },
+        "exec-train-merlin": {
+          "container": {
+            "args": [
+              "--executor_input",
+              "{{$}}",
+              "--function_to_execute",
+              "train_merlin"
+            ],
+            "command": [
+              "sh",
+              "-c",
+              "\nif ! [ -x \"$(command -v pip)\" ]; then\n    python3 -m ensurepip || python3 -m ensurepip --user || apt-get install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1 python3 -m pip install --quiet     --no-warn-script-location 'google-cloud-aiplatform==1.18.1' 'kfp==1.8.14' && \"$0\" \"$@\"\n",
+              "sh",
+              "-ec",
+              "program_path=$(mktemp -d)\nprintf \"%s\" \"$0\" > \"$program_path/ephemeral_component.py\"\npython3 -m kfp.v2.components.executor_main                         --component_module_path                         \"$program_path/ephemeral_component.py\"                         \"$@\"\n",
+              "\nimport kfp\nfrom kfp.v2 import dsl\nfrom kfp.v2.dsl import *\nfrom typing import *\n\ndef train_merlin(\n    project: str,\n    location: str,\n    version: str,\n    train_image_uri: str,     # TODO: Artifact\n    tb_resource: str,\n    batch_size: int, \n    train_epochs: int,\n    train_dir: str,\n    valid_dir: str,\n    workflow_dir: str,\n    experiment_name: str,\n    experiment_run: str,\n    service_account: str,\n) -> NamedTuple('Outputs', [\n    ('merlin_model_gcs_dir', str),\n    ('query_tower_gcs_dir', str),\n    ('candidate_tower_gcs_uri', str),\n    ('candidate_embeddings_gcs_uri', str),\n]):\n\n    import logging\n    from google.cloud import aiplatform as vertex_ai\n    from datetime import datetime\n    import time\n\n    vertex_ai.init(\n        project=project,\n        location=location,\n    )\n\n    TIMESTAMP = time.strftime(\"%Y%m%d-%H%M%S\")\n    # ====================================================\n    # Helper function for workerpool specs\n    # ====================================================\n    def prepare_worker_pool_specs(\n        image_uri,\n        # args,\n        cmd,\n        replica_count=1,\n        machine_type=\"n1-standard-16\",\n        accelerator_count=1,\n        accelerator_type=\"ACCELERATOR_TYPE_UNSPECIFIED\",\n        reduction_server_count=0,\n        reduction_server_machine_type=\"n1-highcpu-16\",\n        reduction_server_image_uri=\"us-docker.pkg.dev/vertex-ai-restricted/training/reductionserver:latest\",\n    ):\n\n        if accelerator_count > 0:\n            machine_spec = {\n                \"machine_type\": machine_type,\n                \"accelerator_type\": accelerator_type,\n                \"accelerator_count\": accelerator_count,\n            }\n        else:\n            machine_spec = {\"machine_type\": machine_type}\n\n        container_spec = {\n            \"image_uri\": image_uri,\n            # \"args\": args,\n            \"command\": cmd,\n        }\n\n        chief_spec = {\n            \"replica_count\": 1,\n            \"machine_spec\": machine_spec,\n            \"container_spec\": container_spec,\n        }\n\n        worker_pool_specs = [chief_spec]\n        if replica_count > 1:\n            workers_spec = {\n                \"replica_count\": replica_count - 1,\n                \"machine_spec\": machine_spec,\n                \"container_spec\": container_spec,\n            }\n            worker_pool_specs.append(workers_spec)\n        if reduction_server_count > 1:\n            workers_spec = {\n                \"replica_count\": reduction_server_count,\n                \"machine_spec\": {\n                    \"machine_type\": reduction_server_machine_type,\n                },\n                \"container_spec\": {\"image_uri\": reduction_server_image_uri},\n            }\n            worker_pool_specs.append(workers_spec)\n\n        return worker_pool_specs\n\n    # ====================================================\n    # Define device strategy\n    # ====================================================\n    # TODO: parameterize\n\n    WORKER_MACHINE_TYPE = 'a2-highgpu-1g'\n    REPLICA_COUNT = 1\n    ACCELERATOR_TYPE = 'NVIDIA_TESLA_A100'\n    PER_MACHINE_ACCELERATOR_COUNT = 1\n    REDUCTION_SERVER_COUNT = 0                                                      \n    REDUCTION_SERVER_MACHINE_TYPE = \"n1-highcpu-16\"\n    DISTRIBUTE_STRATEGY = 'single'\n\n    # ====================================================\n    # # DEFINE ARGS\n    # ====================================================\n    # TODO: parameterize\n\n    BATCH_SIZE = 4096*4      # TODO: `batch_size * 4 ? jw\n    LEARNING_RATE = 0.001\n    LAYERS = \"[512, 256, 128]\"\n\n    OUTPUT_BUCKET = 'jt-merlin-scaling'\n\n    EXPERIMENT_RUN = f'{experiment_run}-{TIMESTAMP}'\n\n    WORKER_CMD = [\n        'sh',\n        '-euc',\n        f'''pip freeze && python -m trainer.train_task --tb_name={tb_resource} --per_gpu_batch_size={batch_size} \\\n        --train_output_bucket={OUTPUT_BUCKET} --train_dir={train_dir} --valid_dir={valid_dir} --workflow_dir={workflow_dir} \\\n        --num_epochs={train_epochs} --learning_rate={LEARNING_RATE} --distribute={DISTRIBUTE_STRATEGY} \\\n        --experiment_name={experiment_name} --experiment_run={EXPERIMENT_RUN} --project={project} --location={location}'''\n    ]\n\n    WORKER_POOL_SPECS = prepare_worker_pool_specs(\n        image_uri=train_image_uri,\n        # args=WORKER_ARGS,\n        cmd=WORKER_CMD,\n        replica_count=REPLICA_COUNT,\n        machine_type=WORKER_MACHINE_TYPE,\n        accelerator_count=PER_MACHINE_ACCELERATOR_COUNT,\n        accelerator_type=ACCELERATOR_TYPE,\n        reduction_server_count=REDUCTION_SERVER_COUNT,\n        reduction_server_machine_type=REDUCTION_SERVER_MACHINE_TYPE,\n    )\n    # ==============================================================================\n    # Submit Train Job \n    # ==============================================================================\n    STAGING_BUCKET = f'gs://{OUTPUT_BUCKET}/{experiment_name}'\n    JOB_NAME = f'train-merlin-retrieval-{version}'\n    gpu_type = ACCELERATOR_TYPE.lower() # lowercase for labels\n\n    job = vertex_ai.CustomJob(\n        display_name=JOB_NAME,\n        worker_pool_specs=WORKER_POOL_SPECS,\n        staging_bucket=STAGING_BUCKET,\n        labels={\n            'gpu': f'{gpu_type}',\n            'gpu_per_replica' : f'{PER_MACHINE_ACCELERATOR_COUNT}',\n            'replica_cnt' : f'{REPLICA_COUNT}',\n        }\n    )\n\n    job.run(\n        sync=True, \n        service_account=service_account,\n        # tensorboard=EXPERIMENT_TB,\n        restart_job_on_worker_restart=False,\n        enable_web_access=True,\n    )\n\n    # uris set during train script\n    WORKING_DIR_GCS_URI = f'gs://{OUTPUT_BUCKET}/{experiment_name}/{EXPERIMENT_RUN}'\n    MODEL_DIR = f\"{WORKING_DIR_GCS_URI}/model-dir\"\n    QUERY_TOWER_PATH = f\"{MODEL_DIR}/query-tower\"\n    CANDIDATE_TOWER_PATH = f\"{MODEL_DIR}/candidate-tower\"\n    EMBEDDINGS_PATH = f\"{MODEL_DIR}/candidate-embeddings\"\n\n    logging.info(f'WORKING_DIR_GCS_URI: {WORKING_DIR_GCS_URI}')\n    logging.info(f'MODEL_DIR: {MODEL_DIR}')\n    logging.info(f'QUERY_TOWER_PATH: {QUERY_TOWER_PATH}')\n    logging.info(f'CANDIDATE_TOWER_PATH: {CANDIDATE_TOWER_PATH}')\n    logging.info(f'EMBEDDINGS_PATH: {EMBEDDINGS_PATH}')\n\n    return (\n        f'{MODEL_DIR}',\n        f'{QUERY_TOWER_PATH}',\n        f'{CANDIDATE_TOWER_PATH}',\n        f'{EMBEDDINGS_PATH}',\n    )\n\n"
+            ],
+            "image": "python:3.9"
+          }
+        },
+        "exec-upload-custom-model": {
+          "container": {
+            "args": [
+              "--executor_input",
+              "{{$}}",
+              "--function_to_execute",
+              "upload_custom_model"
+            ],
+            "command": [
+              "sh",
+              "-c",
+              "\nif ! [ -x \"$(command -v pip)\" ]; then\n    python3 -m ensurepip || python3 -m ensurepip --user || apt-get install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1 python3 -m pip install --quiet     --no-warn-script-location 'google-cloud-aiplatform==1.18.1' 'kfp==1.8.14' && \"$0\" \"$@\"\n",
+              "sh",
+              "-ec",
+              "program_path=$(mktemp -d)\nprintf \"%s\" \"$0\" > \"$program_path/ephemeral_component.py\"\npython3 -m kfp.v2.components.executor_main                         --component_module_path                         \"$program_path/ephemeral_component.py\"                         \"$@\"\n",
+              "\nimport kfp\nfrom kfp.v2 import dsl\nfrom kfp.v2.dsl import *\nfrom typing import *\n\ndef upload_custom_model(\n    project: str,\n    location: str,\n    version: str,\n    display_name: str,\n    artifact_uri: str,\n    unmanaged_container_model: Input[Artifact],\n    serving_container_image_uri: str,\n) -> NamedTuple('Outputs', [\n    ('model', Artifact),\n    ('model_resource_name', str),\n]):\n\n    import logging\n    from google.cloud import aiplatform as vertex_ai\n\n    vertex_ai.init(\n        project=project,\n        location=location,\n    )\n    logging.info(f\" display_name: {display_name}\")\n    logging.info(f\" artifact_uri: {artifact_uri}\")\n    logging.info(f\" unmanaged_container_model: {unmanaged_container_model}\")\n    logging.info(f\" serving_container_image_uri: {serving_container_image_uri}\")\n\n    logging.info(f\"Uploading model to Vertex...\")\n    model = vertex_ai.Model.upload(\n        display_name=display_name,\n        artifact_uri=artifact_uri,\n        serving_container_image_uri=serving_container_image_uri,\n        serving_container_predict_route='/predict',\n        serving_container_health_route='/health',\n        serving_container_command=[\"sh\", \"-c\", \"uvicorn app.main:app --host 0.0.0.0 --port $AIP_HTTP_PORT\"],\n        serving_container_args='--gpus all',\n        sync=True,\n    )\n\n    MODEL_RESOURCE_NAME = model.resource_name\n    logging.info(f\" MODEL_RESOURCE_NAME: {MODEL_RESOURCE_NAME}\")\n\n    return (\n        model,\n        f'{MODEL_RESOURCE_NAME}',\n    )\n\n"
+            ],
+            "image": "python:3.9"
+          }
+        }
+      }
+    },
+    "pipelineInfo": {
+      "name": "v2-merlin-train-deploy--v2"
+    },
+    "root": {
+      "dag": {
+        "tasks": {
+          "build-custom-image": {
+            "cachingOptions": {
+              "enableCache": true
+            },
+            "componentRef": {
+              "name": "comp-build-custom-image"
+            },
+            "inputs": {
+              "parameters": {
+                "app_dir_name": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "trainer"
+                    }
+                  }
+                },
+                "artifact_gcs_path": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "{{$.inputs.parameters['pipelineparam--pipe_gcs_path']}}"
+                    }
+                  }
+                },
+                "custom_image_uri": {
+                  "componentInputParameter": "training_image_uri"
+                },
+                "docker_name": {
+                  "componentInputParameter": "train_docker_name"
+                },
+                "pipelineparam--pipe_gcs_path": {
+                  "componentInputParameter": "pipe_gcs_path"
+                },
+                "project": {
+                  "componentInputParameter": "project"
+                }
+              }
+            },
+            "taskInfo": {
+              "name": "Build Train Image"
+            }
+          },
+          "build-custom-image-2": {
+            "cachingOptions": {
+              "enableCache": true
+            },
+            "componentRef": {
+              "name": "comp-build-custom-image-2"
+            },
+            "inputs": {
+              "parameters": {
+                "app_dir_name": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "serving"
+                    }
+                  }
+                },
+                "artifact_gcs_path": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "{{$.inputs.parameters['pipelineparam--pipe_gcs_path']}}"
+                    }
+                  }
+                },
+                "custom_image_uri": {
+                  "componentInputParameter": "serving_image_uri"
+                },
+                "docker_name": {
+                  "componentInputParameter": "serving_docker_name"
+                },
+                "pipelineparam--pipe_gcs_path": {
+                  "componentInputParameter": "pipe_gcs_path"
+                },
+                "project": {
+                  "componentInputParameter": "project"
+                }
+              }
+            },
+            "taskInfo": {
+              "name": "Build Serving Image"
+            }
+          },
+          "create-ann-index": {
+            "cachingOptions": {
+              "enableCache": true
+            },
+            "componentRef": {
+              "name": "comp-create-ann-index"
+            },
+            "dependentTasks": [
+              "train-merlin"
+            ],
+            "inputs": {
+              "parameters": {
+                "ann_index_description": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "testing ann index for Merlin deployment"
+                    }
+                  }
+                },
+                "ann_index_display_name": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "ann_index_pipeline_test_{{$.inputs.parameters['pipelineparam--version']}}"
+                    }
+                  }
+                },
+                "approximate_neighbors_count": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "intValue": "50"
+                    }
+                  }
+                },
+                "dimensions": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "intValue": "128"
+                    }
+                  }
+                },
+                "distance_measure_type": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "DOT_PRODUCT_DISTANCE"
+                    }
+                  }
+                },
+                "emb_index_gcs_uri": {
+                  "taskOutputParameter": {
+                    "outputParameterKey": "candidate_embeddings_gcs_uri",
+                    "producerTask": "train-merlin"
+                  }
+                },
+                "leaf_node_embedding_count": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "intValue": "500"
+                    }
+                  }
+                },
+                "leaf_nodes_to_search_percent": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "intValue": "7"
+                    }
+                  }
+                },
+                "location": {
+                  "componentInputParameter": "location"
+                },
+                "pipelineparam--version": {
+                  "componentInputParameter": "version"
+                },
+                "project": {
+                  "componentInputParameter": "project"
+                },
+                "version": {
+                  "componentInputParameter": "version"
+                },
+                "vpc_network_name": {
+                  "componentInputParameter": "vpc_network_name"
+                }
+              }
+            },
+            "taskInfo": {
+              "name": "Create ANN Index"
+            }
+          },
+          "create-ann-index-endpoint-vpc": {
+            "cachingOptions": {
+              "enableCache": true
+            },
+            "componentRef": {
+              "name": "comp-create-ann-index-endpoint-vpc"
+            },
+            "dependentTasks": [
+              "create-ann-index"
+            ],
+            "inputs": {
+              "artifacts": {
+                "ann_index_artifact": {
+                  "taskOutputArtifact": {
+                    "outputArtifactKey": "ann_index",
+                    "producerTask": "create-ann-index"
+                  }
+                }
+              },
+              "parameters": {
+                "ann_index_endpoint_description": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "endpoint for ann index"
+                    }
+                  }
+                },
+                "ann_index_endpoint_display_name": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "ann-index-endpoint-{{$.inputs.parameters['pipelineparam--version']}}"
+                    }
+                  }
+                },
+                "location": {
+                  "componentInputParameter": "location"
+                },
+                "pipelineparam--version": {
+                  "componentInputParameter": "version"
+                },
+                "project": {
+                  "componentInputParameter": "project"
+                },
+                "project_number": {
+                  "componentInputParameter": "project_number"
+                },
+                "version": {
+                  "componentInputParameter": "version"
+                },
+                "vpc_network_name": {
+                  "componentInputParameter": "vpc_network_name"
+                }
+              }
+            },
+            "taskInfo": {
+              "name": "Create ANN Index Endpoint"
+            }
+          },
+          "create-brute-force-index": {
+            "cachingOptions": {
+              "enableCache": true
+            },
+            "componentRef": {
+              "name": "comp-create-brute-force-index"
+            },
+            "dependentTasks": [
+              "train-merlin"
+            ],
+            "inputs": {
+              "parameters": {
+                "approximate_neighbors_count": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "intValue": "50"
+                    }
+                  }
+                },
+                "brute_force_index_description": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "testing bf index for Merlin deployment"
+                    }
+                  }
+                },
+                "brute_force_index_display_name": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "bf_index_pipeline_test_{{$.inputs.parameters['pipelineparam--version']}}"
+                    }
+                  }
+                },
+                "dimensions": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "intValue": "128"
+                    }
+                  }
+                },
+                "distance_measure_type": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "DOT_PRODUCT_DISTANCE"
+                    }
+                  }
+                },
+                "emb_index_gcs_uri": {
+                  "taskOutputParameter": {
+                    "outputParameterKey": "candidate_embeddings_gcs_uri",
+                    "producerTask": "train-merlin"
+                  }
+                },
+                "location": {
+                  "componentInputParameter": "location"
+                },
+                "pipelineparam--version": {
+                  "componentInputParameter": "version"
+                },
+                "project": {
+                  "componentInputParameter": "project"
+                },
+                "version": {
+                  "componentInputParameter": "version"
+                },
+                "vpc_network_name": {
+                  "componentInputParameter": "vpc_network_name"
+                }
+              }
+            },
+            "taskInfo": {
+              "name": "Create BF Index"
+            }
+          },
+          "create-brute-index-endpoint-vpc": {
+            "cachingOptions": {
+              "enableCache": true
+            },
+            "componentRef": {
+              "name": "comp-create-brute-index-endpoint-vpc"
+            },
+            "dependentTasks": [
+              "create-brute-force-index"
+            ],
+            "inputs": {
+              "artifacts": {
+                "bf_index_artifact": {
+                  "taskOutputArtifact": {
+                    "outputArtifactKey": "brute_force_index",
+                    "producerTask": "create-brute-force-index"
+                  }
+                }
+              },
+              "parameters": {
+                "brute_index_endpoint_description": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "endpoint for brute force index"
+                    }
+                  }
+                },
+                "brute_index_endpoint_display_name": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "bf-index-endpoint-{{$.inputs.parameters['pipelineparam--version']}}"
+                    }
+                  }
+                },
+                "location": {
+                  "componentInputParameter": "location"
+                },
+                "pipelineparam--version": {
+                  "componentInputParameter": "version"
+                },
+                "project": {
+                  "componentInputParameter": "project"
+                },
+                "project_number": {
+                  "componentInputParameter": "project_number"
+                },
+                "version": {
+                  "componentInputParameter": "version"
+                },
+                "vpc_network_name": {
+                  "componentInputParameter": "vpc_network_name"
+                }
+              }
+            },
+            "taskInfo": {
+              "name": "Create BF Index Endpoint"
+            }
+          },
+          "deploy-ann-index": {
+            "cachingOptions": {
+              "enableCache": true
+            },
+            "componentRef": {
+              "name": "comp-deploy-ann-index"
+            },
+            "dependentTasks": [
+              "create-ann-index",
+              "create-ann-index-endpoint-vpc"
+            ],
+            "inputs": {
+              "parameters": {
+                "ann_index_resource_uri": {
+                  "taskOutputParameter": {
+                    "outputParameterKey": "ann_index_resource_uri",
+                    "producerTask": "create-ann-index"
+                  }
+                },
+                "deployed_ann_index_name": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "deployed-ann-index-{{$.inputs.parameters['pipelineparam--version']}}"
+                    }
+                  }
+                },
+                "index_endpoint_resource_uri": {
+                  "taskOutputParameter": {
+                    "outputParameterKey": "ann_index_endpoint_resource_uri",
+                    "producerTask": "create-ann-index-endpoint-vpc"
+                  }
+                },
+                "location": {
+                  "componentInputParameter": "location"
+                },
+                "pipelineparam--version": {
+                  "componentInputParameter": "version"
+                },
+                "project": {
+                  "componentInputParameter": "project"
+                },
+                "version": {
+                  "componentInputParameter": "version"
+                }
+              }
+            },
+            "taskInfo": {
+              "name": "Deploy ANN Index"
+            }
+          },
+          "deploy-brute-index": {
+            "cachingOptions": {
+              "enableCache": true
+            },
+            "componentRef": {
+              "name": "comp-deploy-brute-index"
+            },
+            "dependentTasks": [
+              "create-brute-force-index",
+              "create-brute-index-endpoint-vpc"
+            ],
+            "inputs": {
+              "parameters": {
+                "brute_force_index_resource_uri": {
+                  "taskOutputParameter": {
+                    "outputParameterKey": "brute_force_index_resource_uri",
+                    "producerTask": "create-brute-force-index"
+                  }
+                },
+                "deployed_brute_force_index_name": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "deployed-bf-index-{{$.inputs.parameters['pipelineparam--version']}}"
+                    }
+                  }
+                },
+                "index_endpoint_resource_uri": {
+                  "taskOutputParameter": {
+                    "outputParameterKey": "brute_index_endpoint_resource_uri",
+                    "producerTask": "create-brute-index-endpoint-vpc"
+                  }
+                },
+                "location": {
+                  "componentInputParameter": "location"
+                },
+                "pipelineparam--version": {
+                  "componentInputParameter": "version"
+                },
+                "project": {
+                  "componentInputParameter": "project"
+                },
+                "version": {
+                  "componentInputParameter": "version"
+                }
+              }
+            },
+            "taskInfo": {
+              "name": "Deploy BF Index"
+            }
+          },
+          "endpoint-create": {
+            "cachingOptions": {
+              "enableCache": true
+            },
+            "componentRef": {
+              "name": "comp-endpoint-create"
+            },
+            "dependentTasks": [
+              "upload-custom-model"
+            ],
+            "inputs": {
+              "parameters": {
+                "description": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": ""
+                    }
+                  }
+                },
+                "display_name": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "query-tower-endpoint-{{$.inputs.parameters['pipelineparam--version']}}"
+                    }
+                  }
+                },
+                "encryption_spec_key_name": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": ""
+                    }
+                  }
+                },
+                "labels": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "{}"
+                    }
+                  }
+                },
+                "location": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "us-central1"
+                    }
+                  }
+                },
+                "network": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": ""
+                    }
+                  }
+                },
+                "pipelineparam--version": {
+                  "componentInputParameter": "version"
+                },
+                "project": {
+                  "componentInputParameter": "project"
+                }
+              }
+            },
+            "taskInfo": {
+              "name": "Create Query Endpoint"
+            }
+          },
+          "importer": {
+            "cachingOptions": {
+              "enableCache": true
+            },
+            "componentRef": {
+              "name": "comp-importer"
+            },
+            "dependentTasks": [
+              "train-merlin"
+            ],
+            "inputs": {
+              "parameters": {
+                "uri": {
+                  "taskOutputParameter": {
+                    "outputParameterKey": "query_tower_gcs_dir",
+                    "producerTask": "train-merlin"
+                  }
+                }
+              }
+            },
+            "taskInfo": {
+              "name": "Import Query Tower"
+            }
+          },
+          "importer-2": {
+            "cachingOptions": {
+              "enableCache": true
+            },
+            "componentRef": {
+              "name": "comp-importer-2"
+            },
+            "dependentTasks": [
+              "train-merlin"
+            ],
+            "inputs": {
+              "parameters": {
+                "uri": {
+                  "taskOutputParameter": {
+                    "outputParameterKey": "candidate_tower_gcs_uri",
+                    "producerTask": "train-merlin"
+                  }
+                }
+              }
+            },
+            "taskInfo": {
+              "name": "Import Candidate Tower"
+            }
+          },
+          "model-deploy": {
+            "cachingOptions": {
+              "enableCache": true
+            },
+            "componentRef": {
+              "name": "comp-model-deploy"
+            },
+            "dependentTasks": [
+              "endpoint-create",
+              "upload-custom-model"
+            ],
+            "inputs": {
+              "artifacts": {
+                "endpoint": {
+                  "taskOutputArtifact": {
+                    "outputArtifactKey": "endpoint",
+                    "producerTask": "endpoint-create"
+                  }
+                },
+                "model": {
+                  "taskOutputArtifact": {
+                    "outputArtifactKey": "model",
+                    "producerTask": "upload-custom-model"
+                  }
+                }
+              },
+              "parameters": {
+                "automatic_resources_max_replica_count": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "intValue": "0"
+                    }
+                  }
+                },
+                "automatic_resources_min_replica_count": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "intValue": "0"
+                    }
+                  }
+                },
+                "dedicated_resources_accelerator_count": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "intValue": "1"
+                    }
+                  }
+                },
+                "dedicated_resources_accelerator_type": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "NVIDIA_TESLA_T4"
+                    }
+                  }
+                },
+                "dedicated_resources_machine_type": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "n1-standard-4"
+                    }
+                  }
+                },
+                "dedicated_resources_max_replica_count": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "intValue": "0"
+                    }
+                  }
+                },
+                "dedicated_resources_min_replica_count": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "intValue": "0"
+                    }
+                  }
+                },
+                "deployed_model_display_name": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "deployed-query-tower-{{$.inputs.parameters['pipelineparam--version']}}"
+                    }
+                  }
+                },
+                "disable_container_logging": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "intValue": "0"
+                    }
+                  }
+                },
+                "enable_access_logging": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "intValue": "0"
+                    }
+                  }
+                },
+                "explanation_metadata": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "{}"
+                    }
+                  }
+                },
+                "explanation_parameters": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "{}"
+                    }
+                  }
+                },
+                "pipelineparam--version": {
+                  "componentInputParameter": "version"
+                },
+                "service_account": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": ""
+                    }
+                  }
+                },
+                "traffic_split": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "{}"
+                    }
+                  }
+                }
+              }
+            },
+            "taskInfo": {
+              "name": "Deploy Query Tower"
+            }
+          },
+          "train-merlin": {
+            "cachingOptions": {
+              "enableCache": true
+            },
+            "componentRef": {
+              "name": "comp-train-merlin"
+            },
+            "dependentTasks": [
+              "build-custom-image"
+            ],
+            "inputs": {
+              "parameters": {
+                "batch_size": {
+                  "componentInputParameter": "batch_size"
+                },
+                "experiment_name": {
+                  "componentInputParameter": "experiment_name"
+                },
+                "experiment_run": {
+                  "componentInputParameter": "experiment_run"
+                },
+                "location": {
+                  "componentInputParameter": "location"
+                },
+                "project": {
+                  "componentInputParameter": "project"
+                },
+                "service_account": {
+                  "componentInputParameter": "service_account"
+                },
+                "tb_resource": {
+                  "componentInputParameter": "tb_resource"
+                },
+                "train_dir": {
+                  "componentInputParameter": "train_dir"
+                },
+                "train_epochs": {
+                  "componentInputParameter": "train_epochs"
+                },
+                "train_image_uri": {
+                  "taskOutputParameter": {
+                    "outputParameterKey": "custom_image_uri",
+                    "producerTask": "build-custom-image"
+                  }
+                },
+                "valid_dir": {
+                  "componentInputParameter": "valid_dir"
+                },
+                "version": {
+                  "componentInputParameter": "version"
+                },
+                "workflow_dir": {
+                  "componentInputParameter": "workflow_dir"
+                }
+              }
+            },
+            "taskInfo": {
+              "name": "Train Merlin Towers"
+            }
+          },
+          "upload-custom-model": {
+            "cachingOptions": {
+              "enableCache": true
+            },
+            "componentRef": {
+              "name": "comp-upload-custom-model"
+            },
+            "dependentTasks": [
+              "build-custom-image-2",
+              "importer",
+              "train-merlin"
+            ],
+            "inputs": {
+              "artifacts": {
+                "unmanaged_container_model": {
+                  "taskOutputArtifact": {
+                    "outputArtifactKey": "artifact",
+                    "producerTask": "importer"
+                  }
+                }
+              },
+              "parameters": {
+                "artifact_uri": {
+                  "taskOutputParameter": {
+                    "outputParameterKey": "query_tower_gcs_dir",
+                    "producerTask": "train-merlin"
+                  }
+                },
+                "display_name": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "merlin-query-tower-{{$.inputs.parameters['pipelineparam--version']}}"
+                    }
+                  }
+                },
+                "location": {
+                  "componentInputParameter": "location"
+                },
+                "pipelineparam--version": {
+                  "componentInputParameter": "version"
+                },
+                "project": {
+                  "componentInputParameter": "project"
+                },
+                "serving_container_image_uri": {
+                  "taskOutputParameter": {
+                    "outputParameterKey": "custom_image_uri",
+                    "producerTask": "build-custom-image-2"
+                  }
+                },
+                "version": {
+                  "componentInputParameter": "version"
+                }
+              }
+            },
+            "taskInfo": {
+              "name": "Register Query Tower"
+            }
+          }
+        }
+      },
+      "inputDefinitions": {
+        "parameters": {
+          "batch_size": {
+            "type": "INT"
+          },
+          "experiment_name": {
+            "type": "STRING"
+          },
+          "experiment_run": {
+            "type": "STRING"
+          },
+          "location": {
+            "type": "STRING"
+          },
+          "pipe_gcs_path": {
+            "type": "STRING"
+          },
+          "project": {
+            "type": "STRING"
+          },
+          "project_number": {
+            "type": "STRING"
+          },
+          "service_account": {
+            "type": "STRING"
+          },
+          "serving_docker_name": {
+            "type": "STRING"
+          },
+          "serving_image_uri": {
+            "type": "STRING"
+          },
+          "tb_resource": {
+            "type": "STRING"
+          },
+          "train_dir": {
+            "type": "STRING"
+          },
+          "train_docker_name": {
+            "type": "STRING"
+          },
+          "train_epochs": {
+            "type": "INT"
+          },
+          "training_image_uri": {
+            "type": "STRING"
+          },
+          "valid_dir": {
+            "type": "STRING"
+          },
+          "version": {
+            "type": "STRING"
+          },
+          "vpc_network_name": {
+            "type": "STRING"
+          },
+          "workflow_dir": {
+            "type": "STRING"
+          }
+        }
+      }
+    },
+    "schemaVersion": "2.0.0",
+    "sdkVersion": "kfp-1.8.14"
+  },
+  "runtimeConfig": {}
+}
