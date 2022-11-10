@@ -1,7 +1,7 @@
 # merlin-on-vertex
 
 
-### scaling deep retrieval workloads using NVIDIA's [Merlin](https://github.com/NVIDIA-Merlin/Merlin) and [NVTabular](https://github.com/NVIDIA-Merlin/NVTabular) ecosystems on Google Cloud's [Vertex AI platform](https://cloud.google.com/vertex-ai/docs/start/introduction-unified-platform)
+### scaling deep retrieval workloads using NVIDIA's [Merlin](https://github.com/NVIDIA-Merlin/Merlin) & [NVTabular](https://github.com/NVIDIA-Merlin/NVTabular) on Google Cloud's [Vertex AI platform](https://cloud.google.com/vertex-ai/docs/start/introduction-unified-platform)
 
 > [Vertex AI](https://cloud.google.com/vertex-ai) is Google Cloud's unified Machine Learning platform to help data scientists and machine learning engineers increase experimentation, deploy faster, and manage models with confidence.
 
