@@ -458,76 +458,6 @@
           }
         }
       },
-      "comp-model-deploy": {
-        "executorLabel": "exec-model-deploy",
-        "inputDefinitions": {
-          "artifacts": {
-            "endpoint": {
-              "artifactType": {
-                "schemaTitle": "google.VertexEndpoint",
-                "schemaVersion": "0.0.1"
-              }
-            },
-            "model": {
-              "artifactType": {
-                "schemaTitle": "google.VertexModel",
-                "schemaVersion": "0.0.1"
-              }
-            }
-          },
-          "parameters": {
-            "automatic_resources_max_replica_count": {
-              "type": "INT"
-            },
-            "automatic_resources_min_replica_count": {
-              "type": "INT"
-            },
-            "dedicated_resources_accelerator_count": {
-              "type": "INT"
-            },
-            "dedicated_resources_accelerator_type": {
-              "type": "STRING"
-            },
-            "dedicated_resources_machine_type": {
-              "type": "STRING"
-            },
-            "dedicated_resources_max_replica_count": {
-              "type": "INT"
-            },
-            "dedicated_resources_min_replica_count": {
-              "type": "INT"
-            },
-            "deployed_model_display_name": {
-              "type": "STRING"
-            },
-            "disable_container_logging": {
-              "type": "STRING"
-            },
-            "enable_access_logging": {
-              "type": "STRING"
-            },
-            "explanation_metadata": {
-              "type": "STRING"
-            },
-            "explanation_parameters": {
-              "type": "STRING"
-            },
-            "service_account": {
-              "type": "STRING"
-            },
-            "traffic_split": {
-              "type": "STRING"
-            }
-          }
-        },
-        "outputDefinitions": {
-          "parameters": {
-            "gcp_resources": {
-              "type": "STRING"
-            }
-          }
-        }
-      },
       "comp-train-merlin": {
         "executorLabel": "exec-train-merlin",
         "inputDefinitions": {
@@ -848,29 +778,6 @@
             }
           }
         },
-        "exec-model-deploy": {
-          "container": {
-            "args": [
-              "--type",
-              "DeployModel",
-              "--payload",
-              "{\"endpoint\": \"{{$.inputs.artifacts['endpoint'].metadata['resourceName']}}\", \"traffic_split\": {{$.inputs.parameters['traffic_split']}}, \"deployed_model\": {\"model\": \"{{$.inputs.artifacts['model'].metadata['resourceName']}}\", \"dedicated_resources\": {\"machine_spec\": {\"machine_type\": \"{{$.inputs.parameters['dedicated_resources_machine_type']}}\", \"accelerator_type\": \"{{$.inputs.parameters['dedicated_resources_accelerator_type']}}\", \"accelerator_count\": {{$.inputs.parameters['dedicated_resources_accelerator_count']}}}, \"min_replica_count\": {{$.inputs.parameters['dedicated_resources_min_replica_count']}}, \"max_replica_count\": {{$.inputs.parameters['dedicated_resources_max_replica_count']}}}, \"automatic_resources\": {\"min_replica_count\": {{$.inputs.parameters['automatic_resources_min_replica_count']}}, \"max_replica_count\": {{$.inputs.parameters['automatic_resources_max_replica_count']}}}, \"service_account\": \"{{$.inputs.parameters['service_account']}}\", \"disable_container_logging\": {{$.inputs.parameters['disable_container_logging']}}, \"enable_access_logging\": {{$.inputs.parameters['enable_access_logging']}}, \"explanation_spec\": {\"parameters\": {{$.inputs.parameters['explanation_parameters']}}, \"metadata\": {{$.inputs.parameters['explanation_metadata']}}}}}",
-              "--project",
-              "",
-              "--location",
-              "",
-              "--gcp_resources",
-              "{{$.outputs.parameters['gcp_resources'].output_file}}"
-            ],
-            "command": [
-              "python3",
-              "-u",
-              "-m",
-              "google_cloud_pipeline_components.container.v1.endpoint.deploy_model.launcher"
-            ],
-            "image": "gcr.io/ml-pipeline/google-cloud-pipeline-components:1.0.26"
-          }
-        },
         "exec-train-merlin": {
           "container": {
             "args": [
@@ -914,7 +821,7 @@
       }
     },
     "pipelineInfo": {
-      "name": "v2-merlin-train-deploy--v2"
+      "name": "v5-merlin-train-deploy--v5"
     },
     "root": {
       "dag": {
@@ -1119,7 +1026,7 @@
                 "ann_index_endpoint_display_name": {
                   "runtimeValue": {
                     "constantValue": {
-                      "stringValue": "ann-index-endpoint-{{$.inputs.parameters['pipelineparam--version']}}"
+                      "stringValue": "ann-index=endpoint-{{$.inputs.parameters['pipelineparam--version']}}"
                     }
                   }
                 },
@@ -1301,7 +1208,7 @@
                 "deployed_ann_index_name": {
                   "runtimeValue": {
                     "constantValue": {
-                      "stringValue": "deployed-ann-index-{{$.inputs.parameters['pipelineparam--version']}}"
+                      "stringValue": "deployed_ann_index_{{$.inputs.parameters['pipelineparam--version']}}"
                     }
                   }
                 },
@@ -1351,7 +1258,7 @@
                 "deployed_brute_force_index_name": {
                   "runtimeValue": {
                     "constantValue": {
-                      "stringValue": "deployed-bf-index-{{$.inputs.parameters['pipelineparam--version']}}"
+                      "stringValue": "deployed_bf_index_{{$.inputs.parameters['pipelineparam--version']}}"
                     }
                   }
                 },
@@ -1491,140 +1398,6 @@
             },
             "taskInfo": {
               "name": "Import Candidate Tower"
-            }
-          },
-          "model-deploy": {
-            "cachingOptions": {
-              "enableCache": true
-            },
-            "componentRef": {
-              "name": "comp-model-deploy"
-            },
-            "dependentTasks": [
-              "endpoint-create",
-              "upload-custom-model"
-            ],
-            "inputs": {
-              "artifacts": {
-                "endpoint": {
-                  "taskOutputArtifact": {
-                    "outputArtifactKey": "endpoint",
-                    "producerTask": "endpoint-create"
-                  }
-                },
-                "model": {
-                  "taskOutputArtifact": {
-                    "outputArtifactKey": "model",
-                    "producerTask": "upload-custom-model"
-                  }
-                }
-              },
-              "parameters": {
-                "automatic_resources_max_replica_count": {
-                  "runtimeValue": {
-                    "constantValue": {
-                      "intValue": "0"
-                    }
-                  }
-                },
-                "automatic_resources_min_replica_count": {
-                  "runtimeValue": {
-                    "constantValue": {
-                      "intValue": "0"
-                    }
-                  }
-                },
-                "dedicated_resources_accelerator_count": {
-                  "runtimeValue": {
-                    "constantValue": {
-                      "intValue": "1"
-                    }
-                  }
-                },
-                "dedicated_resources_accelerator_type": {
-                  "runtimeValue": {
-                    "constantValue": {
-                      "stringValue": "NVIDIA_TESLA_T4"
-                    }
-                  }
-                },
-                "dedicated_resources_machine_type": {
-                  "runtimeValue": {
-                    "constantValue": {
-                      "stringValue": "n1-standard-4"
-                    }
-                  }
-                },
-                "dedicated_resources_max_replica_count": {
-                  "runtimeValue": {
-                    "constantValue": {
-                      "intValue": "0"
-                    }
-                  }
-                },
-                "dedicated_resources_min_replica_count": {
-                  "runtimeValue": {
-                    "constantValue": {
-                      "intValue": "0"
-                    }
-                  }
-                },
-                "deployed_model_display_name": {
-                  "runtimeValue": {
-                    "constantValue": {
-                      "stringValue": "deployed-query-tower-{{$.inputs.parameters['pipelineparam--version']}}"
-                    }
-                  }
-                },
-                "disable_container_logging": {
-                  "runtimeValue": {
-                    "constantValue": {
-                      "intValue": "0"
-                    }
-                  }
-                },
-                "enable_access_logging": {
-                  "runtimeValue": {
-                    "constantValue": {
-                      "intValue": "0"
-                    }
-                  }
-                },
-                "explanation_metadata": {
-                  "runtimeValue": {
-                    "constantValue": {
-                      "stringValue": "{}"
-                    }
-                  }
-                },
-                "explanation_parameters": {
-                  "runtimeValue": {
-                    "constantValue": {
-                      "stringValue": "{}"
-                    }
-                  }
-                },
-                "pipelineparam--version": {
-                  "componentInputParameter": "version"
-                },
-                "service_account": {
-                  "runtimeValue": {
-                    "constantValue": {
-                      "stringValue": ""
-                    }
-                  }
-                },
-                "traffic_split": {
-                  "runtimeValue": {
-                    "constantValue": {
-                      "stringValue": "{}"
-                    }
-                  }
-                }
-              }
-            },
-            "taskInfo": {
-              "name": "Deploy Query Tower"
             }
           },
           "train-merlin": {

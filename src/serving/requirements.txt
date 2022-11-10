@@ -1,6 +1,8 @@
 uvicorn[standard]==0.15.0
 gunicorn==20.1.0
 fastapi==0.68.1
+uvloop==0.15.2
+fastapi-utils
 google-cloud-aiplatform
 git+https://github.com/NVIDIA-Merlin/models.git
 nvtabular==1.3.3

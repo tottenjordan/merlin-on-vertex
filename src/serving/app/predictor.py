@@ -6,6 +6,8 @@ import merlin.models.tf as mm
 from nvtabular.loader.tf_utils import configure_tensorflow
 configure_tensorflow()
 import tensorflow as tf
+import time
+import logging
 
 
 # These are helper functions that ensure the dictionary input is in a certain order and types are preserved
@@ -18,8 +20,7 @@ reordered_keys = [
     'artist_pop_can', 
     'description_pl', 
     'duration_ms_songs_pl', 
-    'n_songs_pl', 
-    'name', 
+    'n_songs_pl', 'name', 
     'num_albums_pl', 
     'num_artists_pl', 
     'track_name_pl', 
@@ -84,7 +85,10 @@ class Predictor():
             artifacts_uri (str):
                 Required. The value of the environment variable AIP_STORAGE_URI.
         """
-        test_bucket = 'jt-merlin-scaling'
+        logging.info("loading model and workflow")
+        start = time.process_time()
+        
+        test_bucket = 'gs://jt-merlin-scaling'
         self.model = tf.keras.models.load_model(os.path.join(artifacts_uri, "query-tower"))
         # self.workflow = nvt.Workflow.load(os.path.join(artifacts_uri, "workflow/2t-spotify-workflow")) # TODO: parameterize
         self.workflow = nvt.Workflow.load(os.path.join(test_bucket, "nvt-last5-v1full/nvt-analyzed"))
@@ -107,11 +111,20 @@ class Predictor():
                 'artists_followers_pl'
             ]
         )
+        # self.model = tf.keras.models.load_model(os.path.join(artifacts_uri, "query_model_merlin" ))
+        # self.workflow = nvt.Workflow.load(os.path.join(artifacts_uri, "workflow/2t-spotify-workflow"))
+        # self.workflow = self.workflow.remove_inputs(['track_pop_can', 'track_uri_can', 'duration_ms_can', 
+        #                               'track_name_can', 'artist_name_can','album_name_can',
+        #                               'album_uri_can','artist_followers_can', 'artist_genres_can',
+        #                               'artist_name_can', 'artist_pop_can','artist_pop_pl','artist_uri_can', 
+        #                               'artists_followers_pl']) 
         self.loader = None # will load this after first load
+        self.n_rows = 0
+        logging.info(f"loading took {time.process_time() - start} seconds")
         
         return self
         
-    def preprocess(self, prediction_input):
+    def predict(self, prediction_input):
         """Preprocesses the prediction input before doing the prediction.
         Args:
             prediction_input (Any):
@@ -120,12 +133,19 @@ class Predictor():
             The preprocessed prediction input.
         """
         # handle different input types, can take a dict or list of dicts
+        self.n_rows = len(prediction_input)
+        start = time.process_time()
         pandas_instance = create_pandas_instance(prediction_input[0])
+        logging.info(f"Pandas conversion took {time.process_time() - start} seconds")
+        start = time.process_time()
         transformed_inputs = nvt.Dataset(pandas_instance)
+        logging.info(f"NVT data loading took {time.process_time() - start} seconds")
+        start = time.process_time()
         transformed_instance = self.workflow.transform(transformed_inputs)
-        return transformed_instance
+        logging.info(f"Workflow transformation took {time.process_time() - start} seconds")
+        # return transformed_instance
 
-    def predict(self, instances):
+    # def predict(self, instances):
         """Performs prediction.
         Args:
             instances (Any):
@@ -133,9 +153,18 @@ class Predictor():
         Returns:
             Prediction results.
         """  
-        if self.loader is None:
-            self.loader = mm.Loader(instances, batch_size=32, shuffle=False)
-        else:
-            self.loader.data = instances #this is faster we don't want tokeep loading dataloder
-        batch = next(iter(self.loader))
-        return self.model(batch[0])
+        # if self.loader is None:
+        start = time.process_time()
+        # if self.loader is None:
+        #     self.loader = mm.Loader(transformed_instance, batch_size=1, shuffle=False)
+        #     logging.info(f"Dataloader creation took {time.process_time() - start} seconds")
+        # else:
+        #     self.loader.data = transformed_instance #this is faster we don't want tokeep loading dataloder
+        #     logging.info(f"Dataloader creation took {time.process_time() - start} seconds")
+        start = time.process_time()
+        batch = mm.sample_batch(transformed_instance, batch_size=1, include_targets=False, shuffle=False)
+        logging.info(f"TF Dataloader took {time.process_time() - start} seconds")
+        start = time.process_time()
+        output = self.model(batch)
+        logging.info(f"Prediction took {time.process_time() - start} seconds")
+        return output

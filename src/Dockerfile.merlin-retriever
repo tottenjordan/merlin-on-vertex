@@ -1,12 +1,18 @@
 
 FROM nvcr.io/nvidia/merlin/merlin-tensorflow:22.09
 
-WORKDIR /src 
+WORKDIR / 
 
-COPY ./serving/requirements.txt /requirements.txt
+# COPY /src/serving/requirements.txt /requirements.txt
+# COPY ./src/serving/requirements.txt /requirements.txt
+COPY /serving/requirements.txt /requirements.txt
+
 RUN pip install -r /requirements.txt
 
-COPY ./serving/app /app
+# COPY /src/serving/app /app
+# COPY ./src/serving/app /app
+COPY /serving/app /app
+
 EXPOSE 80
     
 CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port $AIP_HTTP_PORT"]
