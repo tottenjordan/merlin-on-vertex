@@ -7,6 +7,12 @@
 
 > [NVIDIA Merlin](https://developer.nvidia.com/nvidia-merlin) is an open-source framework for building large-scale deep learning recommender system.
 
+### Repo structure
+
+> **TODO**
+
+---
+
 ![alt text](https://github.com/tottenjordan/merlin-on-vertex/blob/main/imgs/deep-retrieval-workflow.png)
 
 See [this repo](https://github.com/jswortz/spotify_mpd_two_tower/tree/cbbd29fd71e8b500683635a19f0aa8ae657db884) for a sample development workflow 
