@@ -47,6 +47,8 @@ Spotify's Million Playlist Dataset (MPD) - see [here](https://github.com/jswortz
 * Transform data splits and prepare them for training and serving tasks
 * Orchestrate these NVTabular pipelines with Vertex Managed Pipelines
 * Scale pipeline processing tasks with single or multiple GPU configurations
+
+> With 4 Tesla T4 GPUs per processing component, pipeline processes our Spotify MPD in ~27 minutes
 ---
 
 ### Training -> Deployment pipeline

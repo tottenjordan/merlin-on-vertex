@@ -13,7 +13,8 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 predictor_instance = Predictor()
-loaded_predictor = predictor_instance.load(artifacts_uri = os.environ['AIP_STORAGE_URI'])
+ARTIFACT_DIR = "gs://jt-merlin-scaling/pipes-2tower-merlin-tf-v5/run-v1-20221110-024710/model-dir"
+loaded_predictor = predictor_instance.load(artifacts_uri = ARTIFACT_DIR)  # os.environ['AIP_STORAGE_URI'])
 
 app = FastAPI()
 add_timing_middleware(app, record=logger.info, prefix="app", exclude="untimed")
