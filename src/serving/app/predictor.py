@@ -87,8 +87,10 @@ class Predictor():
                 Required. The value of the environment variable AIP_STORAGE_URI.
         """
         logging.info("loading model and workflow")
+        logging.info(f"artifacts_uri: {artifacts_uri}")
         start = time.process_time()
         
+<<<<<<< HEAD
 <<<<<<< HEAD
         test_bucket = 'gs://jt-merlin-scaling'
         self.model = tf.keras.models.load_model(artifacts_uri)
@@ -99,6 +101,10 @@ class Predictor():
         self.model = tf.keras.models.load_model(os.path.join(artifacts_uri, "query-tower"))
         self.workflow = nvt.Workflow.load(os.path.join(artifacts_uri, "workflow"))
 >>>>>>> 59f09107be76251cf04a2e190c9b19fa1f0ec078
+=======
+        self.model = tf.keras.models.load_model(f"{artifacts_uri}/query-tower")
+        self.workflow = nvt.Workflow.load(f"{artifacts_uri}/workflow")
+>>>>>>> 114acfc883e7424cf4ff3089a1e8d2764d43f82b
         self.workflow = self.workflow.remove_inputs(
             [
                 'track_pop_can', 
