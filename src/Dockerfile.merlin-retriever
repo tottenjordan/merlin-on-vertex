@@ -3,14 +3,10 @@ FROM nvcr.io/nvidia/merlin/merlin-tensorflow:22.09
 
 WORKDIR / 
 
-# COPY /src/serving/requirements.txt /requirements.txt
-# COPY ./src/serving/requirements.txt /requirements.txt
 COPY /serving/requirements.txt /requirements.txt
 
 RUN pip install -r /requirements.txt
 
-# COPY /src/serving/app /app
-# COPY ./src/serving/app /app
 COPY /serving/app /app
 
 EXPOSE 80

@@ -1,3 +1,4 @@
+
 import os
 
 # =============================================
@@ -11,7 +12,7 @@ VALID_SRC_DIR = 'valid_data_parquet'
 # =============================================
 #           Setup
 # =============================================
-VERSION = 'v1full'
+VERSION = 'v2full'
 APP = 'spotify'
 # MODEL_DISPLAY_NAME = f'nvt-prep-last5-{VERSION}'
 # WORKSPACE = f'gs://{BUCKET_destin}/{MODEL_DISPLAY_NAME}'
@@ -22,15 +23,19 @@ VERTEX_SA = f"vertex-sa@{PROJECT_ID}.iam.gserviceaccount.com"
 # =============================================
 #           Artifacts
 # =============================================
-MODEL_DISPLAY_NAME = "nvt-last5-v1full"
-WORKSPACE = "gs://jt-merlin-scaling/nvt-last5-v1full"
+# MODEL_DISPLAY_NAME = f"nvt-last5-{VERSION}"
+# WORKSPACE = f"gs://jt-merlin-scaling/nvt-last5-{VERSION}"
+MODEL_DISPLAY_NAME = f'nvt-last5-{VERSION}'
+WORKSPACE = f'gs://{BUCKET_destin}/{MODEL_DISPLAY_NAME}'
 NVT_IMAGE_URI = "gcr.io/hybrid-vertex/nvt-preprocessing"
 
 # =============================================
 #           Pipeline Configs
 # =============================================
-PREPROCESS_PARQUET_PIPELINE_NAME = "nvt-parquet-v1full"
-PREPROCESS_PARQUET_PIPELINE_ROOT = "gs://jt-merlin-scaling/nvt-last5-v1full/nvt-parquet-v1full"
+# PREPROCESS_PARQUET_PIPELINE_NAME = f"nvt-parquet-{VERSION}"
+# PREPROCESS_PARQUET_PIPELINE_ROOT = f"gs://jt-merlin-scaling/{MODEL_DISPLAY_NAME}/{PREPROCESS_PARQUET_PIPELINE_NAME}"
+PREPROCESS_PARQUET_PIPELINE_NAME = f'nvt-parquet-{VERSION}'
+PREPROCESS_PARQUET_PIPELINE_ROOT = os.path.join(WORKSPACE, PREPROCESS_PARQUET_PIPELINE_NAME)
 
 INSTANCE_TYPE = os.getenv("INSTANCE_TYPE", "n1-highmem-64")
 CPU_LIMIT = os.getenv("CPU_LIMIT", "64")
