@@ -87,10 +87,11 @@ class Predictor():
                 Required. The value of the environment variable AIP_STORAGE_URI.
         """
         logging.info("loading model and workflow")
+        logging.info(f"artifacts_uri: {artifacts_uri}")
         start = time.process_time()
         
-        self.model = tf.keras.models.load_model(os.path.join(artifacts_uri, "query-tower"))
-        self.workflow = nvt.Workflow.load(os.path.join(artifacts_uri, "workflow"))
+        self.model = tf.keras.models.load_model(f"{artifacts_uri}/query-tower")
+        self.workflow = nvt.Workflow.load(f"{artifacts_uri}/workflow")
         self.workflow = self.workflow.remove_inputs(
             [
                 'track_pop_can', 
