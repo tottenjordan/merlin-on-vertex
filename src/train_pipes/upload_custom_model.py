@@ -20,7 +20,7 @@ def upload_custom_model(
     unmanaged_container_model: Input[Artifact],
     serving_container_image_uri: str,
 ) -> NamedTuple('Outputs', [
-    ('model', Artifact),
+    ('model', Model),
     ('model_resource_name', str),
 ]):
     

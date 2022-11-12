@@ -11,9 +11,11 @@ from .predictor import Predictor
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
+test_bucket = 'gs://jt-merlin-scaling'
 predictor_instance = Predictor()
-loaded_predictor = predictor_instance.load(artifacts_uri = os.environ['AIP_STORAGE_URI'])
+
+loaded_predictor = predictor_instance.load(artifacts_uri = os.path.join(os.environ['AIP_STORAGE_URI'],'query-tower'),
+                                          workflow_uri = os.path.join(os.environ['AIP_STORAGE_URI'], 'workflow'))
 
 app = FastAPI()
 add_timing_middleware(app, record=logger.info, prefix="app", exclude="untimed")

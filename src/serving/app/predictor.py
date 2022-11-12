@@ -79,7 +79,7 @@ class Predictor():
     def __init__(self):
         return
     
-    def load(self, artifacts_uri):
+    def load(self, artifacts_uri, workflow_uri):
         """Loads the model artifact.
         Args:
             artifacts_uri (str):
@@ -89,9 +89,9 @@ class Predictor():
         start = time.process_time()
         
         test_bucket = 'gs://jt-merlin-scaling'
-        self.model = tf.keras.models.load_model(os.path.join(artifacts_uri, "query-tower"))
+        self.model = tf.keras.models.load_model(artifacts_uri)
         # self.workflow = nvt.Workflow.load(os.path.join(artifacts_uri, "workflow/2t-spotify-workflow")) # TODO: parameterize
-        self.workflow = nvt.Workflow.load(os.path.join(test_bucket, "nvt-last5-v1full/nvt-analyzed"))
+        self.workflow = nvt.Workflow.load(workflow_uri)
         # self.workflow = nvt.Workflow.load('gs://jt-merlin-scaling/nvt-last5-v1full/nvt-analyzed') # TODO: parametrize
         self.workflow = self.workflow.remove_inputs(
             [

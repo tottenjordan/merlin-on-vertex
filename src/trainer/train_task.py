@@ -320,6 +320,9 @@ def main(args):
     QUERY_TOWER_PATH = f"{MODEL_DIR}/query-tower"
     CANDIDATE_TOWER_PATH = f"{MODEL_DIR}/candidate-tower"
     EMBEDDINGS_PATH = f"{MODEL_DIR}/candidate-embeddings"
+    WORKFLOW_PATH = f"{MODEL_DIR}/workflow"
+    
+    workflow.save(WORKFLOW_PATH) #saving so workflow is in the same artifact uri relative path
     
     if task_type == 'chief':
         # save query tower

@@ -422,6 +422,12 @@
         "executorLabel": "exec-importer",
         "inputDefinitions": {
           "parameters": {
+            "metadata": {
+              "type": "STRING"
+            },
+            "metadata-2": {
+              "type": "STRING"
+            },
             "uri": {
               "type": "STRING"
             }
@@ -454,6 +460,163 @@
                 "schemaTitle": "google.UnmanagedContainerModel",
                 "schemaVersion": "0.0.1"
               }
+            }
+          }
+        }
+      },
+      "comp-model-deploy": {
+        "executorLabel": "exec-model-deploy",
+        "inputDefinitions": {
+          "artifacts": {
+            "endpoint": {
+              "artifactType": {
+                "schemaTitle": "google.VertexEndpoint",
+                "schemaVersion": "0.0.1"
+              }
+            },
+            "model": {
+              "artifactType": {
+                "schemaTitle": "google.VertexModel",
+                "schemaVersion": "0.0.1"
+              }
+            }
+          },
+          "parameters": {
+            "automatic_resources_max_replica_count": {
+              "type": "INT"
+            },
+            "automatic_resources_min_replica_count": {
+              "type": "INT"
+            },
+            "dedicated_resources_accelerator_count": {
+              "type": "INT"
+            },
+            "dedicated_resources_accelerator_type": {
+              "type": "STRING"
+            },
+            "dedicated_resources_machine_type": {
+              "type": "STRING"
+            },
+            "dedicated_resources_max_replica_count": {
+              "type": "INT"
+            },
+            "dedicated_resources_min_replica_count": {
+              "type": "INT"
+            },
+            "deployed_model_display_name": {
+              "type": "STRING"
+            },
+            "disable_container_logging": {
+              "type": "STRING"
+            },
+            "enable_access_logging": {
+              "type": "STRING"
+            },
+            "explanation_metadata": {
+              "type": "STRING"
+            },
+            "explanation_parameters": {
+              "type": "STRING"
+            },
+            "service_account": {
+              "type": "STRING"
+            },
+            "traffic_split": {
+              "type": "STRING"
+            }
+          }
+        },
+        "outputDefinitions": {
+          "parameters": {
+            "gcp_resources": {
+              "type": "STRING"
+            }
+          }
+        }
+      },
+      "comp-model-upload": {
+        "executorLabel": "exec-model-upload",
+        "inputDefinitions": {
+          "artifacts": {
+            "unmanaged_container_model": {
+              "artifactType": {
+                "schemaTitle": "google.UnmanagedContainerModel",
+                "schemaVersion": "0.0.1"
+              }
+            }
+          },
+          "parameters": {
+            "artifact_uri": {
+              "type": "STRING"
+            },
+            "description": {
+              "type": "STRING"
+            },
+            "display_name": {
+              "type": "STRING"
+            },
+            "encryption_spec_key_name": {
+              "type": "STRING"
+            },
+            "explanation_metadata": {
+              "type": "STRING"
+            },
+            "explanation_parameters": {
+              "type": "STRING"
+            },
+            "instance_schema_uri": {
+              "type": "STRING"
+            },
+            "labels": {
+              "type": "STRING"
+            },
+            "location": {
+              "type": "STRING"
+            },
+            "parameters_schema_uri": {
+              "type": "STRING"
+            },
+            "prediction_schema_uri": {
+              "type": "STRING"
+            },
+            "project": {
+              "type": "STRING"
+            },
+            "serving_container_args": {
+              "type": "STRING"
+            },
+            "serving_container_command": {
+              "type": "STRING"
+            },
+            "serving_container_environment_variables": {
+              "type": "STRING"
+            },
+            "serving_container_health_route": {
+              "type": "STRING"
+            },
+            "serving_container_image_uri": {
+              "type": "STRING"
+            },
+            "serving_container_ports": {
+              "type": "STRING"
+            },
+            "serving_container_predict_route": {
+              "type": "STRING"
+            }
+          }
+        },
+        "outputDefinitions": {
+          "artifacts": {
+            "model": {
+              "artifactType": {
+                "schemaTitle": "google.VertexModel",
+                "schemaVersion": "0.0.1"
+              }
+            }
+          },
+          "parameters": {
+            "gcp_resources": {
+              "type": "STRING"
             }
           }
         }
@@ -515,54 +678,6 @@
               "type": "STRING"
             },
             "query_tower_gcs_dir": {
-              "type": "STRING"
-            }
-          }
-        }
-      },
-      "comp-upload-custom-model": {
-        "executorLabel": "exec-upload-custom-model",
-        "inputDefinitions": {
-          "artifacts": {
-            "unmanaged_container_model": {
-              "artifactType": {
-                "schemaTitle": "system.Artifact",
-                "schemaVersion": "0.0.1"
-              }
-            }
-          },
-          "parameters": {
-            "artifact_uri": {
-              "type": "STRING"
-            },
-            "display_name": {
-              "type": "STRING"
-            },
-            "location": {
-              "type": "STRING"
-            },
-            "project": {
-              "type": "STRING"
-            },
-            "serving_container_image_uri": {
-              "type": "STRING"
-            },
-            "version": {
-              "type": "STRING"
-            }
-          }
-        },
-        "outputDefinitions": {
-          "artifacts": {
-            "model": {
-              "artifactType": {
-                "schemaTitle": "system.Artifact",
-                "schemaVersion": "0.0.1"
-              }
-            }
-          },
-          "parameters": {
-            "model_resource_name": {
               "type": "STRING"
             }
           }
@@ -761,6 +876,27 @@
             "artifactUri": {
               "runtimeParameter": "uri"
             },
+            "metadata": {
+              "args": [
+                "--gpus all"
+              ],
+              "containerSpec": {
+                "command": [
+                  "sh",
+                  "-c",
+                  "uvicorn app.main:app --host 0.0.0.0 --port $AIP_HTTP_PORT"
+                ],
+                "imageUri": "{{$.inputs.parameters['metadata']}}"
+              },
+              "env": [
+                {
+                  "name": "WORKFLOW_URI",
+                  "value": "{{$.inputs.parameters['metadata-2']}}"
+                }
+              ],
+              "healthRoute": "/health",
+              "predictRoute": "/predict"
+            },
             "typeSchema": {
               "schemaTitle": "google.UnmanagedContainerModel",
               "schemaVersion": "0.0.1"
@@ -776,6 +912,54 @@
               "schemaTitle": "google.UnmanagedContainerModel",
               "schemaVersion": "0.0.1"
             }
+          }
+        },
+        "exec-model-deploy": {
+          "container": {
+            "args": [
+              "--type",
+              "DeployModel",
+              "--payload",
+              "{\"endpoint\": \"{{$.inputs.artifacts['endpoint'].metadata['resourceName']}}\", \"traffic_split\": {{$.inputs.parameters['traffic_split']}}, \"deployed_model\": {\"model\": \"{{$.inputs.artifacts['model'].metadata['resourceName']}}\", \"dedicated_resources\": {\"machine_spec\": {\"machine_type\": \"{{$.inputs.parameters['dedicated_resources_machine_type']}}\", \"accelerator_type\": \"{{$.inputs.parameters['dedicated_resources_accelerator_type']}}\", \"accelerator_count\": {{$.inputs.parameters['dedicated_resources_accelerator_count']}}}, \"min_replica_count\": {{$.inputs.parameters['dedicated_resources_min_replica_count']}}, \"max_replica_count\": {{$.inputs.parameters['dedicated_resources_max_replica_count']}}}, \"automatic_resources\": {\"min_replica_count\": {{$.inputs.parameters['automatic_resources_min_replica_count']}}, \"max_replica_count\": {{$.inputs.parameters['automatic_resources_max_replica_count']}}}, \"service_account\": \"{{$.inputs.parameters['service_account']}}\", \"disable_container_logging\": {{$.inputs.parameters['disable_container_logging']}}, \"enable_access_logging\": {{$.inputs.parameters['enable_access_logging']}}, \"explanation_spec\": {\"parameters\": {{$.inputs.parameters['explanation_parameters']}}, \"metadata\": {{$.inputs.parameters['explanation_metadata']}}}}}",
+              "--project",
+              "",
+              "--location",
+              "",
+              "--gcp_resources",
+              "{{$.outputs.parameters['gcp_resources'].output_file}}"
+            ],
+            "command": [
+              "python3",
+              "-u",
+              "-m",
+              "google_cloud_pipeline_components.container.v1.endpoint.deploy_model.launcher"
+            ],
+            "image": "gcr.io/ml-pipeline/google-cloud-pipeline-components:1.0.26"
+          }
+        },
+        "exec-model-upload": {
+          "container": {
+            "args": [
+              "--type",
+              "UploadModel",
+              "--payload",
+              "{\"display_name\": \"{{$.inputs.parameters['display_name']}}\", \"description\": \"{{$.inputs.parameters['description']}}\", \"predict_schemata\": {\"instance_schema_uri\": \"{{$.inputs.parameters['instance_schema_uri']}}\", \"parameters_schema_uri\": \"{{$.inputs.parameters['parameters_schema_uri']}}\", \"prediction_schema_uri\": \"{{$.inputs.parameters['prediction_schema_uri']}}\"}, \"container_spec\": {\"image_uri\": \"{{$.inputs.parameters['serving_container_image_uri']}}\", \"command\": {{$.inputs.parameters['serving_container_command']}}, \"args\": {{$.inputs.parameters['serving_container_args']}}, \"env\": {{$.inputs.parameters['serving_container_environment_variables']}}, \"ports\": {{$.inputs.parameters['serving_container_ports']}}, \"predict_route\": \"{{$.inputs.parameters['serving_container_predict_route']}}\", \"health_route\": \"{{$.inputs.parameters['serving_container_health_route']}}\"}, \"artifact_uri\": \"{{$.inputs.parameters['artifact_uri']}}\", \"explanation_spec\": {\"parameters\": {{$.inputs.parameters['explanation_parameters']}}, \"metadata\": {{$.inputs.parameters['explanation_metadata']}}}, \"encryption_spec\": {\"kms_key_name\":\"{{$.inputs.parameters['encryption_spec_key_name']}}\"}, \"labels\": {{$.inputs.parameters['labels']}}}",
+              "--project",
+              "{{$.inputs.parameters['project']}}",
+              "--location",
+              "{{$.inputs.parameters['location']}}",
+              "--gcp_resources",
+              "{{$.outputs.parameters['gcp_resources'].output_file}}",
+              "--executor_input",
+              "{{$}}"
+            ],
+            "command": [
+              "python3",
+              "-u",
+              "-m",
+              "google_cloud_pipeline_components.container.v1.model.upload_model.launcher"
+            ],
+            "image": "gcr.io/ml-pipeline/google-cloud-pipeline-components:1.0.26"
           }
         },
         "exec-train-merlin": {
@@ -797,31 +981,11 @@
             ],
             "image": "python:3.9"
           }
-        },
-        "exec-upload-custom-model": {
-          "container": {
-            "args": [
-              "--executor_input",
-              "{{$}}",
-              "--function_to_execute",
-              "upload_custom_model"
-            ],
-            "command": [
-              "sh",
-              "-c",
-              "\nif ! [ -x \"$(command -v pip)\" ]; then\n    python3 -m ensurepip || python3 -m ensurepip --user || apt-get install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1 python3 -m pip install --quiet     --no-warn-script-location 'google-cloud-aiplatform==1.18.1' 'kfp==1.8.14' && \"$0\" \"$@\"\n",
-              "sh",
-              "-ec",
-              "program_path=$(mktemp -d)\nprintf \"%s\" \"$0\" > \"$program_path/ephemeral_component.py\"\npython3 -m kfp.v2.components.executor_main                         --component_module_path                         \"$program_path/ephemeral_component.py\"                         \"$@\"\n",
-              "\nimport kfp\nfrom kfp.v2 import dsl\nfrom kfp.v2.dsl import *\nfrom typing import *\n\ndef upload_custom_model(\n    project: str,\n    location: str,\n    version: str,\n    display_name: str,\n    artifact_uri: str,\n    unmanaged_container_model: Input[Artifact],\n    serving_container_image_uri: str,\n) -> NamedTuple('Outputs', [\n    ('model', Artifact),\n    ('model_resource_name', str),\n]):\n\n    import logging\n    from google.cloud import aiplatform as vertex_ai\n\n    vertex_ai.init(\n        project=project,\n        location=location,\n    )\n    logging.info(f\" display_name: {display_name}\")\n    logging.info(f\" artifact_uri: {artifact_uri}\")\n    logging.info(f\" unmanaged_container_model: {unmanaged_container_model}\")\n    logging.info(f\" serving_container_image_uri: {serving_container_image_uri}\")\n\n    logging.info(f\"Uploading model to Vertex...\")\n    model = vertex_ai.Model.upload(\n        display_name=display_name,\n        artifact_uri=artifact_uri,\n        serving_container_image_uri=serving_container_image_uri,\n        serving_container_predict_route='/predict',\n        serving_container_health_route='/health',\n        serving_container_command=[\"sh\", \"-c\", \"uvicorn app.main:app --host 0.0.0.0 --port $AIP_HTTP_PORT\"],\n        serving_container_args='--gpus all',\n        sync=True,\n    )\n\n    MODEL_RESOURCE_NAME = model.resource_name\n    logging.info(f\" MODEL_RESOURCE_NAME: {MODEL_RESOURCE_NAME}\")\n\n    return (\n        model,\n        f'{MODEL_RESOURCE_NAME}',\n    )\n\n"
-            ],
-            "image": "python:3.9"
-          }
         }
       }
     },
     "pipelineInfo": {
-      "name": "v5-merlin-train-deploy--v5"
+      "name": "v7-merlin-train-deploy--v7"
     },
     "root": {
       "dag": {
@@ -868,9 +1032,7 @@
             }
           },
           "build-custom-image-2": {
-            "cachingOptions": {
-              "enableCache": true
-            },
+            "cachingOptions": {},
             "componentRef": {
               "name": "comp-build-custom-image-2"
             },
@@ -1294,7 +1456,7 @@
               "name": "comp-endpoint-create"
             },
             "dependentTasks": [
-              "upload-custom-model"
+              "model-upload"
             ],
             "inputs": {
               "parameters": {
@@ -1353,20 +1515,28 @@
             }
           },
           "importer": {
-            "cachingOptions": {
-              "enableCache": true
-            },
+            "cachingOptions": {},
             "componentRef": {
               "name": "comp-importer"
             },
             "dependentTasks": [
+              "build-custom-image-2",
               "train-merlin"
             ],
             "inputs": {
               "parameters": {
+                "metadata": {
+                  "taskOutputParameter": {
+                    "outputParameterKey": "custom_image_uri",
+                    "producerTask": "build-custom-image-2"
+                  }
+                },
+                "metadata-2": {
+                  "componentInputParameter": "workflow_dir"
+                },
                 "uri": {
                   "taskOutputParameter": {
-                    "outputParameterKey": "query_tower_gcs_dir",
+                    "outputParameterKey": "merlin_model_gcs_dir",
                     "producerTask": "train-merlin"
                   }
                 }
@@ -1377,9 +1547,7 @@
             }
           },
           "importer-2": {
-            "cachingOptions": {
-              "enableCache": true
-            },
+            "cachingOptions": {},
             "componentRef": {
               "name": "comp-importer-2"
             },
@@ -1398,6 +1566,292 @@
             },
             "taskInfo": {
               "name": "Import Candidate Tower"
+            }
+          },
+          "model-deploy": {
+            "cachingOptions": {
+              "enableCache": true
+            },
+            "componentRef": {
+              "name": "comp-model-deploy"
+            },
+            "dependentTasks": [
+              "endpoint-create",
+              "model-upload"
+            ],
+            "inputs": {
+              "artifacts": {
+                "endpoint": {
+                  "taskOutputArtifact": {
+                    "outputArtifactKey": "endpoint",
+                    "producerTask": "endpoint-create"
+                  }
+                },
+                "model": {
+                  "taskOutputArtifact": {
+                    "outputArtifactKey": "model",
+                    "producerTask": "model-upload"
+                  }
+                }
+              },
+              "parameters": {
+                "automatic_resources_max_replica_count": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "intValue": "0"
+                    }
+                  }
+                },
+                "automatic_resources_min_replica_count": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "intValue": "0"
+                    }
+                  }
+                },
+                "dedicated_resources_accelerator_count": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "intValue": "1"
+                    }
+                  }
+                },
+                "dedicated_resources_accelerator_type": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "NVIDIA_TESLA_T4"
+                    }
+                  }
+                },
+                "dedicated_resources_machine_type": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "n1-standard-4"
+                    }
+                  }
+                },
+                "dedicated_resources_max_replica_count": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "intValue": "1"
+                    }
+                  }
+                },
+                "dedicated_resources_min_replica_count": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "intValue": "1"
+                    }
+                  }
+                },
+                "deployed_model_display_name": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "deployed-query-tower-{{$.inputs.parameters['pipelineparam--version']}}"
+                    }
+                  }
+                },
+                "disable_container_logging": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "intValue": "0"
+                    }
+                  }
+                },
+                "enable_access_logging": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "intValue": "0"
+                    }
+                  }
+                },
+                "explanation_metadata": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "{}"
+                    }
+                  }
+                },
+                "explanation_parameters": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "{}"
+                    }
+                  }
+                },
+                "pipelineparam--version": {
+                  "componentInputParameter": "version"
+                },
+                "service_account": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": ""
+                    }
+                  }
+                },
+                "traffic_split": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "{}"
+                    }
+                  }
+                }
+              }
+            },
+            "taskInfo": {
+              "name": "Deploy Query Tower"
+            }
+          },
+          "model-upload": {
+            "cachingOptions": {},
+            "componentRef": {
+              "name": "comp-model-upload"
+            },
+            "dependentTasks": [
+              "importer"
+            ],
+            "inputs": {
+              "artifacts": {
+                "unmanaged_container_model": {
+                  "taskOutputArtifact": {
+                    "outputArtifactKey": "artifact",
+                    "producerTask": "importer"
+                  }
+                }
+              },
+              "parameters": {
+                "artifact_uri": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": ""
+                    }
+                  }
+                },
+                "description": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": ""
+                    }
+                  }
+                },
+                "display_name": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "merlin-query-tower-{{$.inputs.parameters['pipelineparam--version']}}"
+                    }
+                  }
+                },
+                "encryption_spec_key_name": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": ""
+                    }
+                  }
+                },
+                "explanation_metadata": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "{}"
+                    }
+                  }
+                },
+                "explanation_parameters": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "{}"
+                    }
+                  }
+                },
+                "instance_schema_uri": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": ""
+                    }
+                  }
+                },
+                "labels": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "{}"
+                    }
+                  }
+                },
+                "location": {
+                  "componentInputParameter": "location"
+                },
+                "parameters_schema_uri": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": ""
+                    }
+                  }
+                },
+                "pipelineparam--version": {
+                  "componentInputParameter": "version"
+                },
+                "prediction_schema_uri": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": ""
+                    }
+                  }
+                },
+                "project": {
+                  "componentInputParameter": "project"
+                },
+                "serving_container_args": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "[]"
+                    }
+                  }
+                },
+                "serving_container_command": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "[]"
+                    }
+                  }
+                },
+                "serving_container_environment_variables": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "[]"
+                    }
+                  }
+                },
+                "serving_container_health_route": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": ""
+                    }
+                  }
+                },
+                "serving_container_image_uri": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": ""
+                    }
+                  }
+                },
+                "serving_container_ports": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "[]"
+                    }
+                  }
+                },
+                "serving_container_predict_route": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": ""
+                    }
+                  }
+                }
+              }
+            },
+            "taskInfo": {
+              "name": "Register Query Tower"
             }
           },
           "train-merlin": {
@@ -1458,65 +1912,6 @@
             },
             "taskInfo": {
               "name": "Train Merlin Towers"
-            }
-          },
-          "upload-custom-model": {
-            "cachingOptions": {
-              "enableCache": true
-            },
-            "componentRef": {
-              "name": "comp-upload-custom-model"
-            },
-            "dependentTasks": [
-              "build-custom-image-2",
-              "importer",
-              "train-merlin"
-            ],
-            "inputs": {
-              "artifacts": {
-                "unmanaged_container_model": {
-                  "taskOutputArtifact": {
-                    "outputArtifactKey": "artifact",
-                    "producerTask": "importer"
-                  }
-                }
-              },
-              "parameters": {
-                "artifact_uri": {
-                  "taskOutputParameter": {
-                    "outputParameterKey": "query_tower_gcs_dir",
-                    "producerTask": "train-merlin"
-                  }
-                },
-                "display_name": {
-                  "runtimeValue": {
-                    "constantValue": {
-                      "stringValue": "merlin-query-tower-{{$.inputs.parameters['pipelineparam--version']}}"
-                    }
-                  }
-                },
-                "location": {
-                  "componentInputParameter": "location"
-                },
-                "pipelineparam--version": {
-                  "componentInputParameter": "version"
-                },
-                "project": {
-                  "componentInputParameter": "project"
-                },
-                "serving_container_image_uri": {
-                  "taskOutputParameter": {
-                    "outputParameterKey": "custom_image_uri",
-                    "producerTask": "build-custom-image-2"
-                  }
-                },
-                "version": {
-                  "componentInputParameter": "version"
-                }
-              }
-            },
-            "taskInfo": {
-              "name": "Register Query Tower"
             }
           }
         }
