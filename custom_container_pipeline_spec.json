@@ -418,26 +418,6 @@
           }
         }
       },
-      "comp-get-vertex-model": {
-        "executorLabel": "exec-get-vertex-model",
-        "inputDefinitions": {
-          "parameters": {
-            "model_resource_name": {
-              "type": "STRING"
-            }
-          }
-        },
-        "outputDefinitions": {
-          "artifacts": {
-            "model": {
-              "artifactType": {
-                "schemaTitle": "google.VertexModel",
-                "schemaVersion": "0.0.1"
-              }
-            }
-          }
-        }
-      },
       "comp-importer": {
         "executorLabel": "exec-importer",
         "inputDefinitions": {
@@ -486,79 +466,6 @@
       },
       "comp-model-deploy": {
         "executorLabel": "exec-model-deploy",
-<<<<<<< HEAD
-=======
-        "inputDefinitions": {
-          "artifacts": {
-            "endpoint": {
-              "artifactType": {
-                "schemaTitle": "google.VertexEndpoint",
-                "schemaVersion": "0.0.1"
-              }
-            },
-            "model": {
-              "artifactType": {
-                "schemaTitle": "google.VertexModel",
-                "schemaVersion": "0.0.1"
-              }
-            }
-          },
-          "parameters": {
-            "automatic_resources_max_replica_count": {
-              "type": "INT"
-            },
-            "automatic_resources_min_replica_count": {
-              "type": "INT"
-            },
-            "dedicated_resources_accelerator_count": {
-              "type": "INT"
-            },
-            "dedicated_resources_accelerator_type": {
-              "type": "STRING"
-            },
-            "dedicated_resources_machine_type": {
-              "type": "STRING"
-            },
-            "dedicated_resources_max_replica_count": {
-              "type": "INT"
-            },
-            "dedicated_resources_min_replica_count": {
-              "type": "INT"
-            },
-            "deployed_model_display_name": {
-              "type": "STRING"
-            },
-            "disable_container_logging": {
-              "type": "STRING"
-            },
-            "enable_access_logging": {
-              "type": "STRING"
-            },
-            "explanation_metadata": {
-              "type": "STRING"
-            },
-            "explanation_parameters": {
-              "type": "STRING"
-            },
-            "service_account": {
-              "type": "STRING"
-            },
-            "traffic_split": {
-              "type": "STRING"
-            }
-          }
-        },
-        "outputDefinitions": {
-          "parameters": {
-            "gcp_resources": {
-              "type": "STRING"
-            }
-          }
-        }
-      },
-      "comp-train-merlin": {
-        "executorLabel": "exec-train-merlin",
->>>>>>> 59f09107be76251cf04a2e190c9b19fa1f0ec078
         "inputDefinitions": {
           "artifacts": {
             "endpoint": {
@@ -964,23 +871,6 @@
             "image": "gcr.io/ml-pipeline/google-cloud-pipeline-components:1.0.26"
           }
         },
-        "exec-get-vertex-model": {
-          "container": {
-            "args": [
-              "--executor_input",
-              "{{$}}",
-              "--model_resource_name",
-              "{{$.inputs.parameters['model_resource_name']}}"
-            ],
-            "command": [
-              "sh",
-              "-ec",
-              "program_path=$(mktemp)\nprintf \"%s\" \"$0\" > \"$program_path\"\npython3 -u \"$program_path\" \"$@\"\n",
-              "\nimport os\n\ndef get_vertex_model(executor_input_json, model_resource_name: str):\n    executor_output = {}\n    executor_output['artifacts'] = {}\n    for name, artifacts in executor_input_json.get('outputs',\n                                                  {}).get('artifacts',\n                                                          {}).items():\n      artifacts_list = artifacts.get('artifacts')\n      if name == 'model' and artifacts_list:\n        updated_runtime_artifact = artifacts_list[0]\n        updated_runtime_artifact['uri'] = model_resource_name\n        updated_runtime_artifact['metadata'] = {'resourceName': model_resource_name}\n        artifacts_list = {'artifacts': [updated_runtime_artifact]}\n\n      executor_output['artifacts'][name] = artifacts_list\n\n    # Update the output artifacts.\n    os.makedirs(\n        os.path.dirname(executor_input_json['outputs']['outputFile']),\n        exist_ok=True)\n    with open(executor_input_json['outputs']['outputFile'], 'w') as f:\n      f.write(json.dumps(executor_output))\n\nif __name__ == '__main__':\n  import argparse\n  import json\n\n  parser = argparse.ArgumentParser(description='get resource name')\n  parser.add_argument('--model_resource_name', type=str)\n  parser.add_argument('--executor_input', type=str)\n  args, _ = parser.parse_known_args()\n  executor_input_json = json.loads(args.executor_input)\n  model_resource_name = args.model_resource_name\n  get_vertex_model(executor_input_json, model_resource_name)\n"
-            ],
-            "image": "python:3.8"
-          }
-        },
         "exec-importer": {
           "importer": {
             "artifactUri": {
@@ -1025,32 +915,6 @@
           }
         },
         "exec-model-deploy": {
-<<<<<<< HEAD
-=======
-          "container": {
-            "args": [
-              "--type",
-              "DeployModel",
-              "--payload",
-              "{\"endpoint\": \"{{$.inputs.artifacts['endpoint'].metadata['resourceName']}}\", \"traffic_split\": {{$.inputs.parameters['traffic_split']}}, \"deployed_model\": {\"model\": \"{{$.inputs.artifacts['model'].metadata['resourceName']}}\", \"dedicated_resources\": {\"machine_spec\": {\"machine_type\": \"{{$.inputs.parameters['dedicated_resources_machine_type']}}\", \"accelerator_type\": \"{{$.inputs.parameters['dedicated_resources_accelerator_type']}}\", \"accelerator_count\": {{$.inputs.parameters['dedicated_resources_accelerator_count']}}}, \"min_replica_count\": {{$.inputs.parameters['dedicated_resources_min_replica_count']}}, \"max_replica_count\": {{$.inputs.parameters['dedicated_resources_max_replica_count']}}}, \"automatic_resources\": {\"min_replica_count\": {{$.inputs.parameters['automatic_resources_min_replica_count']}}, \"max_replica_count\": {{$.inputs.parameters['automatic_resources_max_replica_count']}}}, \"service_account\": \"{{$.inputs.parameters['service_account']}}\", \"disable_container_logging\": {{$.inputs.parameters['disable_container_logging']}}, \"enable_access_logging\": {{$.inputs.parameters['enable_access_logging']}}, \"explanation_spec\": {\"parameters\": {{$.inputs.parameters['explanation_parameters']}}, \"metadata\": {{$.inputs.parameters['explanation_metadata']}}}}}",
-              "--project",
-              "",
-              "--location",
-              "",
-              "--gcp_resources",
-              "{{$.outputs.parameters['gcp_resources'].output_file}}"
-            ],
-            "command": [
-              "python3",
-              "-u",
-              "-m",
-              "google_cloud_pipeline_components.container.v1.endpoint.deploy_model.launcher"
-            ],
-            "image": "gcr.io/ml-pipeline/google-cloud-pipeline-components:1.0.26"
-          }
-        },
-        "exec-train-merlin": {
->>>>>>> 59f09107be76251cf04a2e190c9b19fa1f0ec078
           "container": {
             "args": [
               "--type",
@@ -1113,11 +977,7 @@
               "sh",
               "-ec",
               "program_path=$(mktemp -d)\nprintf \"%s\" \"$0\" > \"$program_path/ephemeral_component.py\"\npython3 -m kfp.v2.components.executor_main                         --component_module_path                         \"$program_path/ephemeral_component.py\"                         \"$@\"\n",
-<<<<<<< HEAD
               "\nimport kfp\nfrom kfp.v2 import dsl\nfrom kfp.v2.dsl import *\nfrom typing import *\n\ndef train_merlin(\n    project: str,\n    location: str,\n    version: str,\n    train_image_uri: str,     # TODO: Artifact\n    tb_resource: str,\n    batch_size: int, \n    train_epochs: int,\n    train_dir: str,\n    valid_dir: str,\n    workflow_dir: str,\n    experiment_name: str,\n    experiment_run: str,\n    service_account: str,\n) -> NamedTuple('Outputs', [\n    ('merlin_model_gcs_dir', str),\n    ('query_tower_gcs_dir', str),\n    ('candidate_tower_gcs_uri', str),\n    ('candidate_embeddings_gcs_uri', str),\n]):\n\n    import logging\n    from google.cloud import aiplatform as vertex_ai\n    from datetime import datetime\n    import time\n\n    vertex_ai.init(\n        project=project,\n        location=location,\n    )\n\n    TIMESTAMP = time.strftime(\"%Y%m%d-%H%M%S\")\n    # ====================================================\n    # Helper function for workerpool specs\n    # ====================================================\n    def prepare_worker_pool_specs(\n        image_uri,\n        # args,\n        cmd,\n        replica_count=1,\n        machine_type=\"n1-standard-16\",\n        accelerator_count=1,\n        accelerator_type=\"ACCELERATOR_TYPE_UNSPECIFIED\",\n        reduction_server_count=0,\n        reduction_server_machine_type=\"n1-highcpu-16\",\n        reduction_server_image_uri=\"us-docker.pkg.dev/vertex-ai-restricted/training/reductionserver:latest\",\n    ):\n\n        if accelerator_count > 0:\n            machine_spec = {\n                \"machine_type\": machine_type,\n                \"accelerator_type\": accelerator_type,\n                \"accelerator_count\": accelerator_count,\n            }\n        else:\n            machine_spec = {\"machine_type\": machine_type}\n\n        container_spec = {\n            \"image_uri\": image_uri,\n            # \"args\": args,\n            \"command\": cmd,\n        }\n\n        chief_spec = {\n            \"replica_count\": 1,\n            \"machine_spec\": machine_spec,\n            \"container_spec\": container_spec,\n        }\n\n        worker_pool_specs = [chief_spec]\n        if replica_count > 1:\n            workers_spec = {\n                \"replica_count\": replica_count - 1,\n                \"machine_spec\": machine_spec,\n                \"container_spec\": container_spec,\n            }\n            worker_pool_specs.append(workers_spec)\n        if reduction_server_count > 1:\n            workers_spec = {\n                \"replica_count\": reduction_server_count,\n                \"machine_spec\": {\n                    \"machine_type\": reduction_server_machine_type,\n                },\n                \"container_spec\": {\"image_uri\": reduction_server_image_uri},\n            }\n            worker_pool_specs.append(workers_spec)\n\n        return worker_pool_specs\n\n    # ====================================================\n    # Define device strategy\n    # ====================================================\n    # TODO: parameterize\n\n    WORKER_MACHINE_TYPE = 'a2-highgpu-1g'\n    REPLICA_COUNT = 1\n    ACCELERATOR_TYPE = 'NVIDIA_TESLA_A100'\n    PER_MACHINE_ACCELERATOR_COUNT = 1\n    REDUCTION_SERVER_COUNT = 0                                                      \n    REDUCTION_SERVER_MACHINE_TYPE = \"n1-highcpu-16\"\n    DISTRIBUTE_STRATEGY = 'single'\n\n    # ====================================================\n    # # DEFINE ARGS\n    # ====================================================\n    # TODO: parameterize\n\n    BATCH_SIZE = 4096*4      # TODO: `batch_size * 4 ? jw\n    LEARNING_RATE = 0.001\n    LAYERS = \"[512, 256, 128]\"\n\n    OUTPUT_BUCKET = 'jt-merlin-scaling'\n\n    EXPERIMENT_RUN = f'{experiment_run}-{TIMESTAMP}'\n\n    WORKER_CMD = [\n        'sh',\n        '-euc',\n        f'''pip freeze && python -m trainer.train_task --tb_name={tb_resource} --per_gpu_batch_size={batch_size} \\\n        --train_output_bucket={OUTPUT_BUCKET} --train_dir={train_dir} --valid_dir={valid_dir} --workflow_dir={workflow_dir} \\\n        --num_epochs={train_epochs} --learning_rate={LEARNING_RATE} --distribute={DISTRIBUTE_STRATEGY} \\\n        --experiment_name={experiment_name} --experiment_run={EXPERIMENT_RUN} --project={project} --location={location}'''\n    ]\n\n    WORKER_POOL_SPECS = prepare_worker_pool_specs(\n        image_uri=train_image_uri,\n        # args=WORKER_ARGS,\n        cmd=WORKER_CMD,\n        replica_count=REPLICA_COUNT,\n        machine_type=WORKER_MACHINE_TYPE,\n        accelerator_count=PER_MACHINE_ACCELERATOR_COUNT,\n        accelerator_type=ACCELERATOR_TYPE,\n        reduction_server_count=REDUCTION_SERVER_COUNT,\n        reduction_server_machine_type=REDUCTION_SERVER_MACHINE_TYPE,\n    )\n    # ==============================================================================\n    # Submit Train Job \n    # ==============================================================================\n    STAGING_BUCKET = f'gs://{OUTPUT_BUCKET}/{experiment_name}'\n    JOB_NAME = f'train-merlin-retrieval-{version}'\n    gpu_type = ACCELERATOR_TYPE.lower() # lowercase for labels\n\n    job = vertex_ai.CustomJob(\n        display_name=JOB_NAME,\n        worker_pool_specs=WORKER_POOL_SPECS,\n        staging_bucket=STAGING_BUCKET,\n        labels={\n            'gpu': f'{gpu_type}',\n            'gpu_per_replica' : f'{PER_MACHINE_ACCELERATOR_COUNT}',\n            'replica_cnt' : f'{REPLICA_COUNT}',\n        }\n    )\n\n    job.run(\n        sync=True, \n        service_account=service_account,\n        # tensorboard=EXPERIMENT_TB,\n        restart_job_on_worker_restart=False,\n        enable_web_access=True,\n    )\n\n    # uris set during train script\n    WORKING_DIR_GCS_URI = f'gs://{OUTPUT_BUCKET}/{experiment_name}/{EXPERIMENT_RUN}'\n    MODEL_DIR = f\"{WORKING_DIR_GCS_URI}/model-dir\"\n    QUERY_TOWER_PATH = f\"{MODEL_DIR}/query-tower\"\n    CANDIDATE_TOWER_PATH = f\"{MODEL_DIR}/candidate-tower\"\n    EMBEDDINGS_PATH = f\"{MODEL_DIR}/candidate-embeddings\"\n\n    logging.info(f'WORKING_DIR_GCS_URI: {WORKING_DIR_GCS_URI}')\n    logging.info(f'MODEL_DIR: {MODEL_DIR}')\n    logging.info(f'QUERY_TOWER_PATH: {QUERY_TOWER_PATH}')\n    logging.info(f'CANDIDATE_TOWER_PATH: {CANDIDATE_TOWER_PATH}')\n    logging.info(f'EMBEDDINGS_PATH: {EMBEDDINGS_PATH}')\n\n    return (\n        f'{MODEL_DIR}',\n        f'{QUERY_TOWER_PATH}',\n        f'{CANDIDATE_TOWER_PATH}',\n        f'{EMBEDDINGS_PATH}',\n    )\n\n"
-=======
-              "\nimport kfp\nfrom kfp.v2 import dsl\nfrom kfp.v2.dsl import *\nfrom typing import *\n\ndef upload_custom_model(\n    project: str,\n    location: str,\n    version: str,\n    display_name: str,\n    artifact_uri: str,\n    unmanaged_container_model: Input[Artifact],\n    serving_container_image_uri: str,\n) -> NamedTuple('Outputs', [\n    ('model', Artifact),\n    ('model_resource_name', str),\n]):\n\n    import logging\n    from google.cloud import aiplatform as vertex_ai\n\n    vertex_ai.init(\n        project=project,\n        location=location,\n    )\n    logging.info(f\" display_name: {display_name}\")\n    logging.info(f\" artifact_uri: {artifact_uri}\")\n    logging.info(f\" unmanaged_container_model: {unmanaged_container_model}\")\n    logging.info(f\" serving_container_image_uri: {serving_container_image_uri}\")\n\n    logging.info(f\"Uploading model to Vertex...\")\n    model = vertex_ai.Model.upload(\n        display_name=display_name,\n        artifact_uri=artifact_uri,\n        serving_container_image_uri=serving_container_image_uri,\n        serving_container_predict_route='/predict',\n        serving_container_health_route='/health',\n        serving_container_command=[\"sh\", \"-c\", \"uvicorn app.main:app --host 0.0.0.0 --port $AIP_HTTP_PORT\"],\n        serving_container_args='--gpus all',\n        # parent_model=PARENT_MODEL,\n        sync=True,\n    )\n\n    MODEL_RESOURCE_NAME = model.resource_name\n    logging.info(f\" MODEL_RESOURCE_NAME: {MODEL_RESOURCE_NAME}\")\n\n    return (\n        model,\n        f'{MODEL_RESOURCE_NAME}',\n    )\n\n"
->>>>>>> 114acfc883e7424cf4ff3089a1e8d2764d43f82b
             ],
             "image": "python:3.9"
           }
@@ -1125,15 +985,7 @@
       }
     },
     "pipelineInfo": {
-<<<<<<< HEAD
-<<<<<<< HEAD
-      "name": "v7-merlin-train-deploy--v7"
-=======
-      "name": "jtv7-merlin-train-deploy-jtv7"
->>>>>>> 59f09107be76251cf04a2e190c9b19fa1f0ec078
-=======
-      "name": "jtv11-merlin-train-deploy-jtv11"
->>>>>>> 114acfc883e7424cf4ff3089a1e8d2764d43f82b
+      "name": "v8-merlin-train-deploy--v8"
     },
     "root": {
       "dag": {
@@ -1180,7 +1032,9 @@
             }
           },
           "build-custom-image-2": {
-            "cachingOptions": {},
+            "cachingOptions": {
+              "enableCache": true
+            },
             "componentRef": {
               "name": "comp-build-custom-image-2"
             },
@@ -1662,32 +1516,10 @@
               "name": "Create Query Endpoint"
             }
           },
-          "get-vertex-model": {
+          "importer": {
             "cachingOptions": {
               "enableCache": true
             },
-            "componentRef": {
-              "name": "comp-get-vertex-model"
-            },
-            "dependentTasks": [
-              "upload-custom-model"
-            ],
-            "inputs": {
-              "parameters": {
-                "model_resource_name": {
-                  "taskOutputParameter": {
-                    "outputParameterKey": "model_resource_name",
-                    "producerTask": "upload-custom-model"
-                  }
-                }
-              }
-            },
-            "taskInfo": {
-              "name": "Get Vertex Model"
-            }
-          },
-          "importer": {
-            "cachingOptions": {},
             "componentRef": {
               "name": "comp-importer"
             },
@@ -1719,7 +1551,9 @@
             }
           },
           "importer-2": {
-            "cachingOptions": {},
+            "cachingOptions": {
+              "enableCache": true
+            },
             "componentRef": {
               "name": "comp-importer-2"
             },
@@ -1741,139 +1575,6 @@
             }
           },
           "model-deploy": {
-<<<<<<< HEAD
-=======
-            "cachingOptions": {
-              "enableCache": true
-            },
-            "componentRef": {
-              "name": "comp-model-deploy"
-            },
-            "dependentTasks": [
-              "endpoint-create",
-              "get-vertex-model"
-            ],
-            "inputs": {
-              "artifacts": {
-                "endpoint": {
-                  "taskOutputArtifact": {
-                    "outputArtifactKey": "endpoint",
-                    "producerTask": "endpoint-create"
-                  }
-                },
-                "model": {
-                  "taskOutputArtifact": {
-                    "outputArtifactKey": "model",
-                    "producerTask": "get-vertex-model"
-                  }
-                }
-              },
-              "parameters": {
-                "automatic_resources_max_replica_count": {
-                  "runtimeValue": {
-                    "constantValue": {
-                      "intValue": "0"
-                    }
-                  }
-                },
-                "automatic_resources_min_replica_count": {
-                  "runtimeValue": {
-                    "constantValue": {
-                      "intValue": "0"
-                    }
-                  }
-                },
-                "dedicated_resources_accelerator_count": {
-                  "runtimeValue": {
-                    "constantValue": {
-                      "intValue": "1"
-                    }
-                  }
-                },
-                "dedicated_resources_accelerator_type": {
-                  "runtimeValue": {
-                    "constantValue": {
-                      "stringValue": "NVIDIA_TESLA_T4"
-                    }
-                  }
-                },
-                "dedicated_resources_machine_type": {
-                  "runtimeValue": {
-                    "constantValue": {
-                      "stringValue": "n1-standard-4"
-                    }
-                  }
-                },
-                "dedicated_resources_max_replica_count": {
-                  "runtimeValue": {
-                    "constantValue": {
-                      "intValue": "1"
-                    }
-                  }
-                },
-                "dedicated_resources_min_replica_count": {
-                  "runtimeValue": {
-                    "constantValue": {
-                      "intValue": "1"
-                    }
-                  }
-                },
-                "deployed_model_display_name": {
-                  "runtimeValue": {
-                    "constantValue": {
-                      "stringValue": "deployed-qtower-{{$.inputs.parameters['pipelineparam--version']}}"
-                    }
-                  }
-                },
-                "disable_container_logging": {
-                  "runtimeValue": {
-                    "constantValue": {
-                      "intValue": "0"
-                    }
-                  }
-                },
-                "enable_access_logging": {
-                  "runtimeValue": {
-                    "constantValue": {
-                      "intValue": "0"
-                    }
-                  }
-                },
-                "explanation_metadata": {
-                  "runtimeValue": {
-                    "constantValue": {
-                      "stringValue": "{}"
-                    }
-                  }
-                },
-                "explanation_parameters": {
-                  "runtimeValue": {
-                    "constantValue": {
-                      "stringValue": "{}"
-                    }
-                  }
-                },
-                "pipelineparam--version": {
-                  "componentInputParameter": "version"
-                },
-                "service_account": {
-                  "componentInputParameter": "service_account"
-                },
-                "traffic_split": {
-                  "runtimeValue": {
-                    "constantValue": {
-                      "stringValue": "{}"
-                    }
-                  }
-                }
-              }
-            },
-            "taskInfo": {
-              "name": "Deploy Query Tower"
-            }
-          },
-          "train-merlin": {
->>>>>>> 59f09107be76251cf04a2e190c9b19fa1f0ec078
             "cachingOptions": {
               "enableCache": true
             },
@@ -2008,7 +1709,9 @@
             }
           },
           "model-upload": {
-            "cachingOptions": {},
+            "cachingOptions": {
+              "enableCache": true
+            },
             "componentRef": {
               "name": "comp-model-upload"
             },
