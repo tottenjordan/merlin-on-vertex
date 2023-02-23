@@ -129,6 +129,8 @@ def create_parquet_nvt_dataset(
     # BUCKET = 'gs://spotify-builtin-2t'
     # DATA_PATH = f"{BUCKET}/{data_prefix}/0000000000**.snappy.parquet"
     DATA_PATH = f"gs://{bucket_name}/{data_prefix}/{file_pattern}" #0000000000**.snappy.parquet"
+    logging.info(f"DATA_PATH: {DATA_PATH}")
+    
     fs = fsspec.filesystem('gs')
     
     file_list = fs.glob(DATA_PATH)
@@ -139,6 +141,8 @@ def create_parquet_nvt_dataset(
         raise FileNotFoundError('Parquet file(s) not found')
 
     file_list = [os.path.join('gs://', i) for i in file_list]
+    
+    logging.info(f"Number of files: {len(file_list)}")
 
     # return nvt.Dataset(f"{bucket_name}/{data_prefix}/0000000000**.snappy.parquet", part_mem_fraction=frac_size)
     return nvt.Dataset(
@@ -265,6 +269,15 @@ def create_parquet_dataset_definition(
     
     logging.info(f'DATASET_DEFINITION: {DATASET_DEFINITION}')
     
+    fs = fsspec.filesystem('gs')
+    file_list = fs.glob(DATASET_DEFINITION)
+
+    if not file_list:
+        raise FileNotFoundError('Parquet file(s) not found')
+
+    file_list = [os.path.join('gs://', i) for i in file_list]
+    logging.info(f"Number of files: {len(file_list)}")
+    
     return nvt.Dataset(f"{DATASET_DEFINITION}", engine='parquet', part_mem_fraction=frac_size)
 
 
@@ -345,7 +358,7 @@ def main_analyze(args):
         frac_size=args.frac_size,
         data_prefix='train_data_parquet', # TODO: JT check
         bucket_name=args.bucket_name,
-        file_pattern="0000000000**.snappy.parquet",
+        file_pattern=file_pattern #"0000000000**.snappy.parquet",
     )
   
     logging.info('Creating Workflow')
@@ -385,7 +398,7 @@ def main_transform(args):
         frac_size=args.frac_size,
         data_prefix='train_data_parquet', # TODO: JT check
         bucket_name=args.bucket_name,
-        file_pattern="0000000000**.snappy.parquet",
+        file_pattern=file_pattern #"0000000000**.snappy.parquet",
     )
 
     logging.info('Transforming Dataset')

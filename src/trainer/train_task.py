@@ -184,7 +184,7 @@ def main(args):
     
     workflow = nvt.Workflow.load(args.workflow_dir) # gs://{BUCKET}/..../nvt-analyzed
     schema = workflow.output_schema
-    embeddings = ops.get_embedding_sizes(workflow)
+    # embeddings = ops.get_embedding_sizes(workflow)
     
     train_data = MerlinDataset(os.path.join(args.train_dir, "*.parquet"), schema=schema, part_size="1GB")
     valid_data = MerlinDataset(os.path.join(args.valid_dir, "*.parquet"), schema=schema, part_size="1GB")

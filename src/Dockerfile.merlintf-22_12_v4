@@ -1,0 +1,15 @@
+
+FROM nvcr.io/nvidia/merlin/merlin-tensorflow:22.12
+
+WORKDIR /
+
+# RUN pip install -U pip
+RUN pip install merlin-models gcsfs google-cloud-aiplatform fastapi
+
+
+COPY trainer /trainer
+# COPY trainer/* ./
+
+# RUN pip install -r trainer/requirements.txt
+
+# CMD python trainer/task.py

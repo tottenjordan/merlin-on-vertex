@@ -8,6 +8,7 @@ configure_tensorflow()
 import tensorflow as tf
 import time
 import logging
+from dataset_to_tensors import *
 
 
 # These are helper functions that ensure the dictionary input is in a certain order and types are preserved
@@ -87,11 +88,13 @@ class Predictor():
                 Required. The value of the environment variable AIP_STORAGE_URI.
         """
         logging.info("loading model and workflow")
-        logging.info(f"artifacts_uri: {artifacts_uri}")
-        start = time.process_time()
+        start_init = time.process_time()
         
-        self.model = tf.keras.models.load_model(f"{artifacts_uri}/query-tower")
-        self.workflow = nvt.Workflow.load(f"{artifacts_uri}/workflow")
+        #test_bucket = 'gs://jt-merlin-scaling'
+        self.model = tf.keras.models.load_model(os.path.join(artifacts_uri, "query_model_merlin" ))
+        # self.workflow = nvt.Workflow.load(os.path.join(artifacts_uri, "workflow/2t-spotify-workflow")) # TODO: parameterize
+        self.workflow = nvt.Workflow.load(os.path.join(artifacts_uri, "workflow/2t-spotify-workflow"))
+        # self.workflow = nvt.Workflow.load('gs://jt-merlin-scaling/nvt-last5-v1full/nvt-analyzed') # TODO: parametrize
         self.workflow = self.workflow.remove_inputs(
             [
                 'track_pop_can', 
@@ -110,13 +113,8 @@ class Predictor():
                 'artists_followers_pl'
             ]
         )
-        self.loader = None # will load this after first load
-        self.n_rows = 0
-        logging.info(f"loading took {time.process_time() - start} seconds")
-        
         return self
-
-    
+        
     def predict(self, prediction_input):
         """Preprocesses the prediction input before doing the prediction.
         Args:
@@ -127,30 +125,24 @@ class Predictor():
         """
         # handle different input types, can take a dict or list of dicts
         self.n_rows = len(prediction_input)
-        
-        # pandas convert
         start = time.process_time()
-        pandas_instance = create_pandas_instance(prediction_input[0])
-        logging.info(f"Pandas conversion took {time.process_time() - start} seconds")
-        
-        # nvtabular data loading
+        pandas_instance = create_pandas_instance(prediction_input)
+        #logging.info(f"Pandas conversion took {time.process_time() - start} seconds")
+        print(f"Pandas conversion took {time.process_time() - start} seconds")
         start = time.process_time()
         transformed_inputs = nvt.Dataset(pandas_instance)
-        logging.info(f"NVT data loading took {time.process_time() - start} seconds")
-        
-        # workflow transformation
+        #logging.info(f"NVT data loading took {time.process_time() - start} seconds")
+        print(f"NVT data loading took {time.process_time() - start} seconds")
         start = time.process_time()
         transformed_instance = self.workflow.transform(transformed_inputs)
-        logging.info(f"Workflow transformation took {time.process_time() - start} seconds")
+        print(f"Workflow transformation took {time.process_time() - start} seconds")
 
-        # tensorflow data loader
+        # def predict(self, instances):
         start = time.process_time()
-        batch = mm.sample_batch(transformed_instance, batch_size=1, include_targets=False, shuffle=False)
-        logging.info(f"TF Dataloader took {time.process_time() - start} seconds")
         
-        # model predict
+        batch = dataset_to_tensors(transformed_instance)
+        print(f"converting to dict_tensors took {time.process_time() - start} seconds")
         start = time.process_time()
         output = self.model(batch)
-        logging.info(f"Prediction took {time.process_time() - start} seconds")
-        
-        return output
+        print(f"Generating query embeddings took {time.process_time() - start} seconds")
+        return transformed_instance, output, batch

@@ -12,7 +12,7 @@ VALID_SRC_DIR = 'valid_data_parquet'
 # =============================================
 #           Setup
 # =============================================
-VERSION = 'v2full'
+VERSION = 'latest-12'
 APP = 'spotify'
 # MODEL_DISPLAY_NAME = f'nvt-prep-last5-{VERSION}'
 # WORKSPACE = f'gs://{BUCKET_destin}/{MODEL_DISPLAY_NAME}'
@@ -37,8 +37,14 @@ NVT_IMAGE_URI = "gcr.io/hybrid-vertex/nvt-preprocessing"
 PREPROCESS_PARQUET_PIPELINE_NAME = f'nvt-parquet-{VERSION}'
 PREPROCESS_PARQUET_PIPELINE_ROOT = os.path.join(WORKSPACE, PREPROCESS_PARQUET_PIPELINE_NAME)
 
-INSTANCE_TYPE = os.getenv("INSTANCE_TYPE", "n1-highmem-64")
-CPU_LIMIT = os.getenv("CPU_LIMIT", "64")
-MEMORY_LIMIT = os.getenv("MEMORY_LIMIT", "624G")
-GPU_LIMIT = os.getenv("GPU_LIMIT", "4")
-GPU_TYPE = os.getenv("GPU_TYPE", "NVIDIA_TESLA_T4")
+# INSTANCE_TYPE = os.getenv("INSTANCE_TYPE", "n1-highmem-64")
+# CPU_LIMIT = os.getenv("CPU_LIMIT", "64")
+# MEMORY_LIMIT = os.getenv("MEMORY_LIMIT", "624G")
+# GPU_LIMIT = os.getenv("GPU_LIMIT", "4")
+# GPU_TYPE = os.getenv("GPU_TYPE", "NVIDIA_TESLA_T4")
+
+INSTANCE_TYPE = os.getenv("INSTANCE_TYPE", "a2-highgpu-2g")
+CPU_LIMIT = os.getenv("CPU_LIMIT", "24")
+MEMORY_LIMIT = os.getenv("MEMORY_LIMIT", "170G")
+GPU_LIMIT = os.getenv("GPU_LIMIT", "2")
+GPU_TYPE = os.getenv("GPU_TYPE", "NVIDIA_TESLA_A100")
