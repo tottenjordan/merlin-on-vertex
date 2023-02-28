@@ -1,5 +1,5 @@
 
-FROM nvcr.io/nvidia/merlin/merlin-tensorflow:22.09
+FROM nvcr.io/nvidia/merlin/merlin-tensorflow:22.12
 
 WORKDIR / 
 

@@ -12,10 +12,6 @@ import pandas as pd
 # TF will have claimed all free GPU memory
 # os.environ["TF_MEMORY_ALLOCATION"] = "0.3"  # fraction of free memory
 
-# # nvtabular
-# import nvtabular as nvt
-# import nvtabular.ops as ops
-
 # merlin
 # from merlin.models.utils.example_utils import workflow_fit_transform
 from merlin.io.dataset import Dataset as MerlinDataset
@@ -43,58 +39,17 @@ from google.cloud.storage.blob import Blob
 
 # repo
 from .two_tower_model import create_two_tower
-# import utils
+from .train_utils import (
+    get_upload_logs_to_manged_tb_command, 
+    get_arch_from_string, 
+    _upload_blob_gcs, 
+    upload_from_directory
+)
 
 # local
 HYPERTUNE_METRIC_NAME = 'AUC'
 LOCAL_MODEL_DIR = '/tmp/saved_model'
 LOCAL_CHECKPOINT_DIR = '/tmp/checkpoints'
-
-# ====================================================
-# Helper functions - TODO: move to utils?
-# ====================================================
-
-def _is_chief(task_type, task_id): 
-    ''' Check for primary if multiworker training
-    '''
-    if task_type == 'chief':
-        results = 'chief'
-    else:
-        results = None
-    return results
-    # return (task_type == 'chief') or (task_type == 'worker' and task_id == 0) or task_type is None
-    # return ((task_type == 'chief' and task_id == 0) or task_type is None)
-
-def get_upload_logs_to_manged_tb_command(tb_resource_name, logs_dir, experiment_name, ttl_hrs, oneshot="false"):
-    """
-    Run this and copy/paste the command into terminal to have 
-    upload the tensorboard logs from this machine to the managed tb instance
-    Note that the log dir is at the granularity of the run to help select the proper
-    timestamped run in Tensorboard
-    You can also run this in one-shot mode after training is done 
-    to upload all tb objects at once
-    """
-    return(
-        f"""tb-gcp-uploader --tensorboard_resource_name={tb_resource_name} \
-        --logdir={logs_dir} \
-        --experiment_name={experiment_name} \
-        --one_shot={oneshot} \
-        --event_file_inactive_secs={60*60*ttl_hrs}"""
-    )
-
-def _upload_blob_gcs(gcs_uri, source_file_name, destination_blob_name, project):
-    """Uploads a file to GCS bucket"""
-    client = storage.Client(project=project)
-    blob = Blob.from_string(os.path.join(gcs_uri, destination_blob_name))
-    blob.bucket._client = client
-    blob.upload_from_filename(source_file_name)
-    
-def get_arch_from_string(arch_string):
-    q = arch_string.replace(']', '')
-    q = q.replace('[', '')
-    q = q.replace(" ", "")
-    return [int(x) for x in q.split(',')]
-
 # ====================================================
 # TRAINING SCRIPT
 # ====================================================
@@ -110,21 +65,36 @@ def main(args):
     os.environ["TF_GPU_ALLOCATOR"] = "cuda_malloc_async"
     
     TIMESTAMP = time.strftime("%Y%m%d-%H%M%S")
+    # TB_RESOURCE_NAME = f'{args.tb_name}'
     
-    vertex_ai.init(project=f'{args.project}', location=f'{args.location}')
-    storage_client = storage.Client(project=args.project)
-    logging.info("vertex_ai initialized...")
+    logging.info(f"EXPERIMENT_NAME: {args.experiment_name}\n RUN_NAME: {args.experiment_run}")
+    logging.info(f'TB_RESOURCE_NAME tb_name: {args.tb_name}')
     
-    EXPERIMENT_NAME = f"{args.experiment_name}"
-    RUN_NAME = f"{args.experiment_run}" #-{TIMESTAMP}" # f"{args.experiment_run}"
-    logging.info(f"EXPERIMENT_NAME: {EXPERIMENT_NAME}\n RUN_NAME: {RUN_NAME}")
-    
-    WORKING_DIR_GCS_URI = f'gs://{args.train_output_bucket}/{EXPERIMENT_NAME}/{RUN_NAME}'
+    # ====================================================
+    # Set directories
+    # ====================================================
+    WORKING_DIR_GCS_URI = f'gs://{args.train_output_bucket}/{args.experiment_name}/{args.experiment_run}'
     logging.info(f"WORKING_DIR_GCS_URI: {WORKING_DIR_GCS_URI}")
     
-    TB_RESOURCE_NAME = f'{args.tb_name}'
     LOGS_DIR = f'{WORKING_DIR_GCS_URI}/tb_logs'
-    logging.info(f"tensorboard LOGS_DIR: {LOGS_DIR}")
+    if 'AIP_TENSORBOARD_LOG_DIR' in os.environ:
+        LOGS_DIR=os.environ['AIP_TENSORBOARD_LOG_DIR']
+        logging.info(f'AIP_TENSORBOARD_LOG_DIR: {LOGS_DIR}')
+        
+    logging.info(f'TensorBoard LOGS_DIR: {LOGS_DIR}')
+    
+    # ====================================================
+    # Init Clients
+    # ====================================================
+    project_number = os.environ["CLOUD_ML_PROJECT_ID"]
+    storage_client = storage.Client(project=f'{args.project}')
+    vertex_ai.init(
+        project=f'{args.project}',
+        location=f'{args.location}',
+        experiment=f'{args.experiment_name}',
+    )
+    
+    logging.info("vertex_ai initialized...")
     
     # ====================================================
     # Set Device / GPU Strategy
@@ -157,11 +127,7 @@ def main(args):
     # set related vars...
     NUM_WORKERS = strategy.num_replicas_in_sync
     GLOBAL_BATCH_SIZE = NUM_WORKERS * args.per_gpu_batch_size
-    # num_gpus = sum([len(gpus) for gpus in args.gpus])
-    # GLOBAL_BATCH_SIZE = num_gpus * args.per_gpu_batch_size
-
     logging.info(f'NUM_WORKERS = {NUM_WORKERS}')
-    # logging.info(f'num_gpus: {num_gpus}')
     logging.info(f'GLOBAL_BATCH_SIZE: {GLOBAL_BATCH_SIZE}')
     
     # set worker vars...
@@ -182,15 +148,11 @@ def main(args):
     # ====================================================
     logging.info(f'Loading workflow & schema from : {args.workflow_dir}')
     
-    workflow = nvt.Workflow.load(args.workflow_dir) # gs://{BUCKET}/..../nvt-analyzed
+    workflow = nvt.Workflow.load(args.workflow_dir)
     schema = workflow.output_schema
-    # embeddings = ops.get_embedding_sizes(workflow)
     
     train_data = MerlinDataset(os.path.join(args.train_dir, "*.parquet"), schema=schema, part_size="1GB")
     valid_data = MerlinDataset(os.path.join(args.valid_dir, "*.parquet"), schema=schema, part_size="1GB")
-    
-    # train_data = MerlinDataset(args.train_dir + "*.parquet", part_size="1GB")
-    # valid_data = MerlinDataset(args.valid_dir + "*.parquet", part_size="1GB")
     
     # ====================================================
     # Callbacks
@@ -199,9 +161,9 @@ def main(args):
         def on_epoch_end(self, epoch, logs=None):
             os.system(
                 get_upload_logs_to_manged_tb_command(
-                    tb_resource_name=TB_RESOURCE_NAME, 
+                    tb_resource_name=args.tb_name, 
                     logs_dir=LOGS_DIR, 
-                    experiment_name=EXPERIMENT_NAME,
+                    experiment_name=args.experiment_name,
                     ttl_hrs = 5, 
                     oneshot="true",
                 )
@@ -268,14 +230,12 @@ def main(args):
     history_keys = model.history.history.keys()
     metrics_dict = {}
     _ = [metrics_dict.update({key: model.history.history[key][-1]}) for key in history_keys]
-    metrics_dict["elapsed_model_fit"] = elapsed_model_fit
-    
+    metrics_dict["elapsed_model_fit"] = elapsed_model_fit 
     logging.info(f'metrics_dict: {metrics_dict}')
     
     metaparams = {}
-    metaparams["experiment_name"] = f'{EXPERIMENT_NAME}'
-    metaparams["experiment_run"] = f"{RUN_NAME}"
-    
+    metaparams["experiment_name"] = f'{args.experiment_name}'
+    metaparams["experiment_run"] = f"{args.experiment_run}"
     logging.info(f'metaparams: {metaparams}')
     
     hyperparams = {}
@@ -285,22 +245,21 @@ def main(args):
     hyperparams["global_batch_size"] = GLOBAL_BATCH_SIZE
     hyperparams["learning_rate"] = args.learning_rate
     hyperparams['layers'] = f'{args.layer_sizes}'
-    
     logging.info(f'hyperparams: {hyperparams}')
     
     # ====================================================
     # Experiments
     # ====================================================
-    logging.info(f"Creating run: {RUN_NAME}; for experiment: {EXPERIMENT_NAME}")
+    logging.info(f"Creating run: {args.experiment_run}; for experiment: {args.experiment_name}")
     
     if task_type == 'chief':
         logging.info(f" task_type logging experiments: {task_type}")
         logging.info(f" task_id logging experiments: {task_id}")
     
         # Create experiment
-        vertex_ai.init(experiment=EXPERIMENT_NAME)
+        vertex_ai.init(experiment=args.experiment_name)
 
-        with vertex_ai.start_run(RUN_NAME) as my_run:
+        with vertex_ai.start_run(args.experiment_run) as my_run:
             logging.info(f"logging metrics_dict")
             my_run.log_metrics(metrics_dict)
 
@@ -313,36 +272,37 @@ def main(args):
     # =============================================
     # save retrieval (query) tower
     # =============================================
+    QUERY_TOWER_LOCAL_DIR = 'query_tower'
+    CANDIDATE_TOWER_LOCAL_DIR = 'candidate_tower'
     # set vars...
-    MODEL_DIR = f"{WORKING_DIR_GCS_URI}/model-dir"
+    MODEL_DIR = f"{WORKING_DIR_GCS_URI}/model_dir"
     logging.info(f'Saving towers to {MODEL_DIR}')
     
-    QUERY_TOWER_PATH = f"{MODEL_DIR}/query-tower"
-    CANDIDATE_TOWER_PATH = f"{MODEL_DIR}/candidate-tower"
-    EMBEDDINGS_PATH = f"{MODEL_DIR}/candidate-embeddings"
+    QUERY_TOWER_PATH = f"{MODEL_DIR}/query_tower"
+    CANDIDATE_TOWER_PATH = f"{MODEL_DIR}/candidate_tower"
+    EMBEDDINGS_PATH = f"{MODEL_DIR}/candidate_embeddings"
     
     if task_type == 'chief':
+        
         # save query tower
         query_tower = model.query_encoder
-        query_tower.save(QUERY_TOWER_PATH)
+        query_tower.save(f'{QUERY_TOWER_LOCAL_DIR}/')
+        logging.info(f'Saved query tower locally to {QUERY_TOWER_LOCAL_DIR}')
+        upload_from_directory(f'./{QUERY_TOWER_LOCAL_DIR}', args.train_output_bucket, f'{args.experiment_name}/{args.experiment_run}/model_dir', f'{args.project}')
         logging.info(f'Saved query tower to {QUERY_TOWER_PATH}')
         
         candidate_tower = model.candidate_encoder
-        candidate_tower.save(CANDIDATE_TOWER_PATH)
+        candidate_tower.save(f'{CANDIDATE_TOWER_LOCAL_DIR}')
+        logging.info(f'Saved candidate tower locally to {CANDIDATE_TOWER_LOCAL_DIR}')
+        upload_from_directory(f'./{CANDIDATE_TOWER_LOCAL_DIR}', args.train_output_bucket, f'{args.experiment_name}/{args.experiment_run}/model_dir', f'{args.project}')
         logging.info(f'Saved candidate tower to {CANDIDATE_TOWER_PATH}')
+
     
     # =============================================
     # save embeddings for ME index
     # =============================================
     EMBEDDINGS_FILE_NAME = "candidate_embeddings.json"
     logging.info(f"Saving {EMBEDDINGS_FILE_NAME} to {EMBEDDINGS_PATH}")
-    
-    # def format_for_matching_engine(data) -> None:
-    #     emb = [data[i] for i in range(LAYER_SIZES[-1])] # get the embeddings
-    #     formatted_emb = '{"id":"' + str(data['track_uri_can']) + '","embedding":[' + ",".join(str(x) for x in list(emb)) + ']}'
-    #     with open(f"{EMBEDDINGS_FILE_NAME}", 'a') as f:
-    #         f.write(formatted_emb)
-    #         f.write("\n")
     
     def format_for_matching_engine(data) -> None:
         cols = [str(i) for i in range(LAYER_SIZES[-1])]      # ensure we are only pulling 0-EMBEDDING_DIM cols

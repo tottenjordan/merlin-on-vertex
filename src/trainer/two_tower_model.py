@@ -43,15 +43,25 @@ def create_two_tower(
     )
     candidate = mm.Encoder(item_inputs, mm.MLPBlock(layer_sizes))
     
-    model = mm.TwoTowerModelV2(
-        query_tower=query,
-        candidate_tower=candidate,
-        # output=mm.ContrastiveOutput(
-        #     to_call=DotProduct(),
-        #     negative_samplers="in-batch",
-        #     schema=item_schema.select_by_tag(Tags.ITEM_ID),
-        #     candidate_name="item",
-        # )
+    model = mm.RetrievalModelV2(
+        query=query,
+        candidate=candidate,
+        output=mm.ContrastiveOutput(
+            to_call=DotProduct(),
+            negative_samplers="in-batch",
+            schema=item_schema.select_by_tag(Tags.ITEM_ID),
+        )
     )
+    
+    # model = mm.TwoTowerModelV2(
+    #     query_tower=query,
+    #     candidate_tower=candidate,
+    #     # output=mm.ContrastiveOutput(
+    #     #     to_call=DotProduct(),
+    #     #     negative_samplers="in-batch",
+    #     #     schema=item_schema.select_by_tag(Tags.ITEM_ID),
+    #     #     candidate_name="item",
+    #     # )
+    # )
     
     return model

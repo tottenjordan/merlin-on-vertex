@@ -1,0 +1,4 @@
+merlin-models 
+gcsfs 
+google-cloud-aiplatform 
+fastapi
