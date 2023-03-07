@@ -69,7 +69,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment_name',type=str,required=False,default='unnamed-experiment')
     parser.add_argument('--experiment_run', type=str, required=False, default='unnamed_run')
-    parser.add_argument('--tb_name', type=str, required=True)
+    parser.add_argument('--tb_name', type=str, required=False)
     parser.add_argument('--distribute', type=str, required=False, default='single')
     parser.add_argument('--train_output_bucket', type=str, required=True) # default='single',)
     parser.add_argument('--workflow_dir', type=str, required=True)
@@ -234,17 +234,17 @@ def main(args):
     # ====================================================
     # Callbacks
     # ====================================================
-    class UploadTBLogsBatchEnd(tf.keras.callbacks.Callback):
-        def on_epoch_end(self, epoch, logs=None):
-            os.system(
-                get_upload_logs_to_manged_tb_command(
-                    tb_resource_name=args.tb_name, 
-                    logs_dir=LOGS_DIR, 
-                    experiment_name=args.experiment_name,
-                    ttl_hrs = 5, 
-                    oneshot="true",
-                )
-            )
+    # class UploadTBLogsBatchEnd(tf.keras.callbacks.Callback):
+    #     def on_epoch_end(self, epoch, logs=None):
+    #         os.system(
+    #             get_upload_logs_to_manged_tb_command(
+    #                 tb_resource_name=args.tb_name, 
+    #                 logs_dir=LOGS_DIR, 
+    #                 experiment_name=args.experiment_name,
+    #                 ttl_hrs = 5, 
+    #                 oneshot="true",
+    #             )
+    #         )
             
     checkpoint_dir=os.environ['AIP_CHECKPOINT_DIR']
     logging.info(f'Saving model checkpoints to {checkpoint_dir}')
@@ -334,7 +334,7 @@ def main(args):
         validation_steps=args.valid_steps, # 100,
         callbacks=[
             tensorboard_callback, 
-            UploadTBLogsBatchEnd(),
+            # UploadTBLogsBatchEnd(),
             model_checkpoint_callback
         ],
         verbose=2

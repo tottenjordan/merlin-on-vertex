@@ -58,16 +58,14 @@ def train_merlin(
     # # DEFINE ARGS
     # ====================================================
     # TODO: parameterize
-
-    worker_pool_specs[0]['container_spec']['command'].append(f'--tb_name={tb_resource}')
-    
+    # worker_pool_specs[0]['container_spec']['command'].append(f'--tb_name={tb_resource}')
     JOB_NAME = f'mm-2t-pipe-train-{version}'
     
     logging.info(f'tensorboard_resource_name: {tb_resource}')
     logging.info(f'service_account: {service_account}')
     logging.info(f'worker_pool_specs: {worker_pool_specs}')
     logging.info(f'JOB_NAME: {JOB_NAME}')
-    logging.info(f'gpu_type: {gpu_type}')
+    # logging.info(f'gpu_type: {gpu_type}')
     # ==============================================================================
     # Submit Train Job 
     # ==============================================================================
@@ -88,7 +86,7 @@ def train_merlin(
     )
     
     # uris set during train script
-    WORKING_DIR_GCS_URI = f'gs://{OUTPUT_BUCKET}/{experiment_name}/{EXPERIMENT_RUN}'
+    WORKING_DIR_GCS_URI = f'gs://{train_output_gcs_bucket}/{experiment_name}/{experiment_run}'
     MODEL_DIR = f"{WORKING_DIR_GCS_URI}/model_dir"
     QUERY_TOWER_PATH = f"{MODEL_DIR}/query_tower"
     CANDIDATE_TOWER_PATH = f"{MODEL_DIR}/candidate_tower"
