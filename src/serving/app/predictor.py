@@ -91,10 +91,14 @@ class Predictor():
         start_init = time.process_time()
         
         #test_bucket = 'gs://jt-merlin-scaling'
-        self.model = tf.keras.models.load_model(os.path.join(artifacts_uri, "query_model_merlin" ))
+        # self.model = tf.keras.models.load_model(os.path.join(artifacts_uri, "query_model_merlin" ))
         # self.workflow = nvt.Workflow.load(os.path.join(artifacts_uri, "workflow/2t-spotify-workflow")) # TODO: parameterize
-        self.workflow = nvt.Workflow.load(os.path.join(artifacts_uri, "workflow/2t-spotify-workflow"))
+        self.model = tf.keras.models.load_model(artifacts_uri)
+        
+        # self.workflow = nvt.Workflow.load(os.path.join(artifacts_uri, "workflow/2t-spotify-workflow"))
         # self.workflow = nvt.Workflow.load('gs://jt-merlin-scaling/nvt-last5-v1full/nvt-analyzed') # TODO: parametrize
+        self.workflow = nvt.Workflow.load("/docker_workflow/workflow")
+        
         self.workflow = self.workflow.remove_inputs(
             [
                 'track_pop_can', 
@@ -126,7 +130,7 @@ class Predictor():
         # handle different input types, can take a dict or list of dicts
         self.n_rows = len(prediction_input)
         start = time.process_time()
-        pandas_instance = create_pandas_instance(prediction_input)
+        pandas_instance = create_pandas_instance(prediction_input[0])
         #logging.info(f"Pandas conversion took {time.process_time() - start} seconds")
         print(f"Pandas conversion took {time.process_time() - start} seconds")
         start = time.process_time()

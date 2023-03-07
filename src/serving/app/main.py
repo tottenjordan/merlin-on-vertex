@@ -4,14 +4,10 @@ import json
 import numpy as np
 import os
 import logging
-from fastapi_utils.timing import add_timing_middleware, record_timing
+
 
 from google.cloud import storage
-# from .predictor import Predictor
 from predictor import Predictor
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 app = FastAPI()
 
@@ -27,7 +23,6 @@ def health():
 async def predict(request: Request):
     body = await request.json()
     instances = body["instances"]
-    preprocessed_inputs = loaded_predictor.preprocess(instances)
-    outputs = loaded_predictor.predict(preprocessed_inputs)
+    outputs = loaded_predictor.predict(instances)
 
-    return {"predictions": outputs.numpy().tolist()}
+    return {"predictions": outputs[1].numpy().tolist()}

@@ -1,0 +1,13 @@
+
+FROM nvcr.io/nvidia/merlin/merlin-tensorflow:22.12
+
+WORKDIR /src
+
+# Copies the trainer code to the docker image.
+COPY trainer/* trainer/ 
+
+# RUN pip install -U pip
+# RUN pip install merlin-models gcsfs google-cloud-aiplatform fastapi
+RUN pip install -r trainer/requirements.txt
+
+RUN apt update && apt -y install nvtop

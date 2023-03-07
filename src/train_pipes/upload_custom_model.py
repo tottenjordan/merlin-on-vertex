@@ -43,7 +43,7 @@ def upload_custom_model(
         serving_container_image_uri=serving_container_image_uri,
         serving_container_predict_route='/predict',
         serving_container_health_route='/health',
-        serving_container_command=["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port $AIP_HTTP_PORT"],
+        serving_container_command=["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port $AIP_HTTP_PORT"],
         serving_container_args='--gpus all',
         # parent_model=PARENT_MODEL,
         sync=True,
