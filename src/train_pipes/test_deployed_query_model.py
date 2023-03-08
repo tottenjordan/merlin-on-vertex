@@ -9,6 +9,7 @@ from kfp.v2.dsl import (Artifact, Dataset, Input, InputPath, Model, Output,
     packages_to_install=[
         'google-cloud-aiplatform==1.22.1',
         'google-api-core==2.10.0',
+        'google-cloud-pipeline-components'
     ],
 )
 def test_deployed_query_model(
@@ -59,46 +60,10 @@ def test_deployed_query_model(
     
     logging.info(f'test_instances_dict: {test_instances_dict}')
     
-    # # test instance #TODO: paramterize
-    # TEST_INSTANCE = {
-    #     'collaborative': 'false',
-    #     'album_name_pl': [
-    #         "There's Really A Wolf", 'Late Nights: The Album','American Teen', 'Crazy In Love', 'Pony'
-    #     ], 
-    #     'artist_genres_pl': [
-    #         "'hawaiian hip hop', 'rap'",
-    #        "'chicago rap', 'dance pop', 'pop', 'pop rap', 'r&b', 'southern hip hop', 'trap', 'urban contemporary'",
-    #        "'pop', 'pop r&b'", "'dance pop', 'pop', 'r&b'",
-    #        "'chill r&b', 'pop', 'pop r&b', 'r&b', 'urban contemporary'"
-    #     ], 
-    #     'artist_name_pl': [
-    #         'Russ', 'Jeremih', 'Khalid', 'Beyonc\xc3\xa9','William Singe'
-    #     ], 
-    #     'artist_pop_can': 82.0, 
-    #     'description_pl': '', 
-    #     'duration_ms_songs_pl': [
-    #         237506.0, 217200.0, 219080.0, 226400.0, 121739.0
-    #     ], 
-    #     'n_songs_pl': 8.0, 
-    #     'name': 'Lit Tunes ', 
-    #     'num_albums_pl': 8.0, 
-    #     'num_artists_pl': 8.0, 
-    #     'track_name_pl': [
-    #         'Losin Control', 'Paradise', 'Location','Crazy In Love - Remix', 'Pony'
-    #     ], 
-    #     'track_pop_pl': [
-    #         79.0, 58.0, 83.0, 71.0, 57.0
-    #     ],
-    #     'duration_ms_seed_pl': 51023.1,
-    #     'pid': 1,
-    #     'track_uri_pl': [
-    #         'spotify:track:4cxMGhkinTocPSVVKWIw0d',
-    #         'spotify:track:1wNEBPo3nsbGCZRryI832I',
-    #         'spotify:track:152lZdxL1OR0ZMW6KquMif',
-    #         'spotify:track:2f4IuijXLxYOeBncS60GUD',
-    #         'spotify:track:4Lj8paMFwyKTGfILLELVxt'
-    #     ]
-    # }
+    # ====================================================
+    # prediction request
+    # ====================================================
+
     start = time.process_time()
 
     playlist_emb = endpoint.predict(instances=[test_instances_dict])
