@@ -30,7 +30,7 @@ def test_model_index_endpoint(
     import logging
     import time
     import numpy as np
-    # import pickle as pkl
+    import pickle as pkl
     
     import base64
 
@@ -105,43 +105,45 @@ def test_model_index_endpoint(
     # ====================================================
     # get query response
     # ====================================================
-    start = time.process_time()
+    start = time.time()
 
-    playlist_emb = endpoint.predict(instances=[test_instances_dict])
+    playlist_emb = _endpoint.predict(instances=[test_instances_dict])
     
-    end = time.process_time()
+    end = time.time()
     
     elapsed_query_time = end - start
-    elapsed_query_time = round(elapsed_query_time, 4)
+    elapsed_query_time = round(elapsed_query_time, 8)
     logging.info(f'Query endpoint latency: {elapsed_query_time} seconds')
     
     # ====================================================
     # call matching engine with predicted emb vectors
     # ====================================================
     logging.info('Retreiving neighbors from ANN index...')
-    start = time.process_time()
+    start = time.time()
     ANN_response = deployed_ann_index.match(
         deployed_index_id=DEPLOYED_ANN_ID,
         queries=playlist_emb.predictions,
         num_neighbors=50
     )
-    end = time.process_time()
+    end = time.time()
     elapsed_ann_time = end - start
-    elapsed_ann_time = round(elapsed_ann_time, 4)
+    elapsed_ann_time = round(elapsed_ann_time, 8)
     logging.info(f'ANN latency: {elapsed_ann_time} seconds')
     
     
     logging.info('Retreiving neighbors from BF index...')
-    start = time.process_time()
+    start = time.time()
     BF_response = deployed_bf_index.match(
         deployed_index_id=DEPLOYED_BF_ID,
         queries=playlist_emb.predictions,
         num_neighbors=50
     )
-    end = time.process_time()
+    end = time.time()
     elapsed_bf_time = end - start
-    elapsed_bf_time = round(elapsed_bf_time, 4)
+    elapsed_bf_time = round(elapsed_bf_time, 8)
     logging.info(f'Bruteforce latency: {elapsed_bf_time} seconds')
+    
+    # TODO: write results to file -> GCS
     
     # ====================================================
     # Calculate recall by determining how many neighbors were correctly retrieved 
