@@ -9,9 +9,15 @@
 
 ### Repo structure
 
-* [01-data-preprocess-pipeline.ipynb](https://github.com/tottenjordan/merlin-on-vertex/blob/main/01-data-preprocess-pipeline.ipynb) - launch Vertex pipeline to orchestrate GPU-based data preprocessing with [NVTabular](https://github.com/NVIDIA-Merlin/NVTabular)
-* [02-merlin-vertex-training.ipynb](https://github.com/tottenjordan/merlin-on-vertex/blob/main/02-merlin-vertex-training.ipynb) - build Merlin two-tower encoder, prepare training application (container/image) with [Cloud Build](https://cloud.google.com/build/docs/build-push-docker-image), scale training with Vertex AI and A100 GPU  
-* [03-query-model-inference.ipynb] - prepare serving application (container/image) with [Cloud Build](https://cloud.google.com/build/docs/build-push-docker-image), deploy trained query tower to [Vertex AI Prediction](https://cloud.google.com/vertex-ai/docs/predictions/overview) endpoint
+* [01-data-preprocess-pipeline.ipynb](https://github.com/tottenjordan/merlin-on-vertex/blob/main/01-data-preprocess-pipeline.ipynb)  
+> * launch Vertex pipeline to orchestrate GPU-based data preprocessing with [NVTabular](https://github.com/NVIDIA-Merlin/NVTabular)
+* [02-merlin-vertex-training.ipynb](https://github.com/tottenjordan/merlin-on-vertex/blob/main/02-merlin-vertex-training.ipynb) 
+> * build two-tower encoder with [Merlin Models](https://github.com/NVIDIA-Merlin/models),
+> * prepare training application (container/image) with [Cloud Build](https://cloud.google.com/build/docs/build-push-docker-image)
+> * scale training with Vertex AI and A100 GPU  
+* [03-query-model-inference.ipynb](https://github.com/tottenjordan/merlin-on-vertex/blob/main/03-query-model-inference.ipynb) 
+> * prepare serving application (container/image) with [Cloud Build](https://cloud.google.com/build/docs/build-push-docker-image), 
+deploy trained query tower to [Vertex AI Prediction](https://cloud.google.com/vertex-ai/docs/predictions/overview) endpoint
 > * [03a-build-docker.ipynb](https://github.com/tottenjordan/merlin-on-vertex/blob/main/03a-build-docker.ipynb) - prepare serving application with *docker*, deploy to Vertex AI Prediction endpoint
 * [04-train-deploy-pipeline.ipynb](https://github.com/tottenjordan/merlin-on-vertex/blob/main/04-train-deploy-pipeline.ipynb) - orchestrate e2e model training and deployemnt (notebooks 02 and 03), create candidate index and deploy to index endpoint with [Vertex AI Matching Engine](https://cloud.google.com/vertex-ai/docs/matching-engine/overview)
 * [05-recs-for-your-spotify.ipynb](https://github.com/tottenjordan/merlin-on-vertex/blob/main/05-recs-for-your-spotify.ipynb) - using trained towers and deployed Matching Engine index, generate playlist recommendations for your own (or any public) Spotify playlist(s) 
@@ -57,7 +63,7 @@ Spotify's Million Playlist Dataset (MPD) - see [here](https://github.com/jswortz
 
 ### Training -> Deployment pipeline
 
-![alt text](https://github.com/tottenjordan/merlin-on-vertex/blob/main/imgs/merlin-pipe.png)
+![alt text](https://github.com/tottenjordan/merlin-on-vertex/blob/main/imgs/merlin-e2e-pipe.png)
 
 * Build custom containers for training and serving
 * Train Merlin retrieval model
