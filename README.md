@@ -11,16 +11,23 @@
 
 * [01-data-preprocess-pipeline.ipynb](https://github.com/tottenjordan/merlin-on-vertex/blob/main/01-data-preprocess-pipeline.ipynb)  
 > * launch Vertex pipeline to orchestrate GPU-based data preprocessing with [NVTabular](https://github.com/NVIDIA-Merlin/NVTabular)
+
 * [02-merlin-vertex-training.ipynb](https://github.com/tottenjordan/merlin-on-vertex/blob/main/02-merlin-vertex-training.ipynb) 
 > * build two-tower encoder with [Merlin Models](https://github.com/NVIDIA-Merlin/models),
 > * prepare training application (container/image) with [Cloud Build](https://cloud.google.com/build/docs/build-push-docker-image)
 > * scale training with Vertex AI and A100 GPU  
+
 * [03-query-model-inference.ipynb](https://github.com/tottenjordan/merlin-on-vertex/blob/main/03-query-model-inference.ipynb) 
-> * prepare serving application (container/image) with [Cloud Build](https://cloud.google.com/build/docs/build-push-docker-image), 
-deploy trained query tower to [Vertex AI Prediction](https://cloud.google.com/vertex-ai/docs/predictions/overview) endpoint
-> * [03a-build-docker.ipynb](https://github.com/tottenjordan/merlin-on-vertex/blob/main/03a-build-docker.ipynb) - prepare serving application with *docker*, deploy to Vertex AI Prediction endpoint
-* [04-train-deploy-pipeline.ipynb](https://github.com/tottenjordan/merlin-on-vertex/blob/main/04-train-deploy-pipeline.ipynb) - orchestrate e2e model training and deployemnt (notebooks 02 and 03), create candidate index and deploy to index endpoint with [Vertex AI Matching Engine](https://cloud.google.com/vertex-ai/docs/matching-engine/overview)
-* [05-recs-for-your-spotify.ipynb](https://github.com/tottenjordan/merlin-on-vertex/blob/main/05-recs-for-your-spotify.ipynb) - using trained towers and deployed Matching Engine index, generate playlist recommendations for your own (or any public) Spotify playlist(s) 
+> * prepare serving application (container/image) with [Cloud Build](https://cloud.google.com/build/docs/build-push-docker-image) 
+> * deploy trained query tower to [Vertex AI Prediction](https://cloud.google.com/vertex-ai/docs/predictions/overview) endpoint
+> * [03a-build-docker.ipynb](https://github.com/tottenjordan/merlin-on-vertex/blob/main/03a-build-docker.ipynb) - (optionally) prepare serving application with *docker*
+
+* [04-train-deploy-pipeline.ipynb](https://github.com/tottenjordan/merlin-on-vertex/blob/main/04-train-deploy-pipeline.ipynb) 
+> * orchestrate e2e model training and deployemnt (notebooks 02 and 03)
+> * create candidate index and deploy to index endpoint with [Vertex AI Matching Engine](https://cloud.google.com/vertex-ai/docs/matching-engine/overview)
+
+* [05-recs-for-your-spotify.ipynb](https://github.com/tottenjordan/merlin-on-vertex/blob/main/05-recs-for-your-spotify.ipynb) 
+> * using trained towers and deployed Matching Engine index, generate playlist recommendations for your own (or any public) Spotify playlist(s) 
 ---
 
 ![alt text](https://github.com/tottenjordan/merlin-on-vertex/blob/main/imgs/deep-retrieval-workflow.png)
@@ -34,10 +41,8 @@ See [this repo](https://github.com/jswortz/spotify_mpd_two_tower/tree/cbbd29fd71
 > Deploying trained models and serving predictions with [Vertex Prediction](https://cloud.google.com/vertex-ai/docs/predictions/getting-predictions) (Triton server coming soon)
 
 ### TODOs
-* Query tower's custom serving image
 * Serving deployment with [Triton Inference Server](https://developer.nvidia.com/nvidia-triton-inference-server) on [Vertex AI Prediction](https://cloud.google.com/vertex-ai/docs/predictions/overview)
 * Add ranking model workflow and demonstrate end-to-end retrieval -> ranking deployment
-* Add data prep instructions and discussion
 ---
 
 ### The dataset
