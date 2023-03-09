@@ -7,6 +7,11 @@
 
 > [NVIDIA Merlin](https://developer.nvidia.com/nvidia-merlin) is an open-source framework for building large-scale deep learning recommender system.
 
+![alt text](https://github.com/tottenjordan/merlin-on-vertex/blob/main/imgs/deep-retrieval-workflow.png)
+
+See [this repo](https://github.com/jswortz/spotify_mpd_two_tower/tree/cbbd29fd71e8b500683635a19f0aa8ae657db884) for a sample development workflow 
+
+---
 ### Repo structure
 
 * [01-data-preprocess-pipeline.ipynb](https://github.com/tottenjordan/merlin-on-vertex/blob/main/01-data-preprocess-pipeline.ipynb)  
@@ -29,10 +34,6 @@
 * [05-recs-for-your-spotify.ipynb](https://github.com/tottenjordan/merlin-on-vertex/blob/main/05-recs-for-your-spotify.ipynb) 
 > * using trained towers and deployed Matching Engine index, generate playlist recommendations for your own (or any public) Spotify playlist(s) 
 ---
-
-![alt text](https://github.com/tottenjordan/merlin-on-vertex/blob/main/imgs/deep-retrieval-workflow.png)
-
-See [this repo](https://github.com/jswortz/spotify_mpd_two_tower/tree/cbbd29fd71e8b500683635a19f0aa8ae657db884) for a sample development workflow 
 
 ### Objectives
 * Operationalize large scale data preprocessing pipelines with NVTabular and [Vertex AI Pipelines](https://cloud.google.com/vertex-ai/docs/pipelines/introduction)
