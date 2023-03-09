@@ -78,9 +78,6 @@ Spotify's Million Playlist Dataset (MPD) - see [here](https://github.com/jswortz
 * Create Matching Engine indexes amd index endpoints
 * Deploy indexes to index endpoints 
 
-### two-tower model for deep retrieval 
-![alt text](https://github.com/tottenjordan/merlin-on-vertex/blob/main/imgs/2tower-diagram.png)
-
 
 
 
