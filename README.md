@@ -33,6 +33,13 @@ See [this repo](https://github.com/jswortz/spotify_mpd_two_tower/tree/cbbd29fd71
 
 * [05-recs-for-your-spotify.ipynb](https://github.com/tottenjordan/merlin-on-vertex/blob/main/05-recs-for-your-spotify.ipynb) 
 > * using trained towers and deployed Matching Engine index, generate playlist recommendations for your own (or any public) Spotify playlist(s) 
+
+The Python modules are in the `src` folder:
+* src/preprocessor - data preprocessing utility functions and classes
+* src/process_pipes - vertex pipeline components for orchestrating data preprocessing
+* src/serving/app - deployment and serving utility functions and classes
+* src/train_pipes - vertex pipeline components for orchestrating the training and deployment pipeline
+* src/trainer - model definitions and training application
 ---
 
 ### Objectives
