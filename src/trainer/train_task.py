@@ -119,11 +119,14 @@ def main(args):
     # Set directories
     # ====================================================
     WORKING_DIR_GCS_URI = f'gs://{args.train_output_bucket}/{args.experiment_name}/{args.experiment_run}'
+    # WORKING_DIR_GCS_URI = f'/gcs/{args.train_output_bucket}/{args.experiment_name}/{args.experiment_run}'
     logging.info(f"WORKING_DIR_GCS_URI: {WORKING_DIR_GCS_URI}")
     
     LOGS_DIR = f'{WORKING_DIR_GCS_URI}/tb_logs'
     if 'AIP_TENSORBOARD_LOG_DIR' in os.environ:
         LOGS_DIR=os.environ['AIP_TENSORBOARD_LOG_DIR']
+        # if LOGS_DIR[0:5] == 'gs://':
+        #     LOGS_DIR = LOGS_DIR.replace('gs://', '/gcs/')
         logging.info(f'AIP_TENSORBOARD_LOG_DIR: {LOGS_DIR}')
         
     logging.info(f'TensorBoard LOGS_DIR: {LOGS_DIR}')
@@ -233,20 +236,11 @@ def main(args):
     
     # ====================================================
     # Callbacks
-    # ====================================================
-    # class UploadTBLogsBatchEnd(tf.keras.callbacks.Callback):
-    #     def on_epoch_end(self, epoch, logs=None):
-    #         os.system(
-    #             get_upload_logs_to_manged_tb_command(
-    #                 tb_resource_name=args.tb_name, 
-    #                 logs_dir=LOGS_DIR, 
-    #                 experiment_name=args.experiment_name,
-    #                 ttl_hrs = 5, 
-    #                 oneshot="true",
-    #             )
-    #         )
-            
+    # ====================================================            
     checkpoint_dir=os.environ['AIP_CHECKPOINT_DIR']
+    # if checkpoint_dir[0:5] == 'gs://':
+    #     checkpoint_dir = checkpoint_dir.replace('gs://', '/gcs/')
+    #     logging.info(f'AIP_CHECKPOINT_DIR: {checkpoint_dir}')
     logging.info(f'Saving model checkpoints to {checkpoint_dir}')
     
     # model checkpoints - ModelCheckpoint | BackupAndRestore
@@ -439,6 +433,7 @@ def main(args):
         EMBEDDINGS_FILE_NAME = "candidate_embeddings.json"
         logging.info(f"Saving {EMBEDDINGS_FILE_NAME} to {EMBEDDINGS_PATH}")
     
+        # helper function
         def format_for_matching_engine(data) -> None:
             cols = [str(i) for i in range(LAYER_SIZES[-1])]      # ensure we are only pulling 0-EMBEDDING_DIM cols
             emb = [data[col] for col in cols]                    # get the embeddings

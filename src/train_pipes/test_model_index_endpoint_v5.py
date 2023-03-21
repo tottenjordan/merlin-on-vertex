@@ -7,7 +7,7 @@ from kfp.v2.dsl import (Artifact, Dataset, Input, InputPath, Model, Output,
 @kfp.v2.dsl.component(
     base_image="python:3.9",
     packages_to_install=[
-        'google-cloud-aiplatform==1.22.1',
+        'google-cloud-aiplatform==1.23.0',
         'google-cloud-pipeline-components',
         'google-cloud-storage',
         'numpy'
@@ -112,7 +112,7 @@ def test_model_index_endpoint(
     end = time.time()
     
     elapsed_query_time = end - start
-    elapsed_query_time = round(elapsed_query_time, 8)
+    elapsed_query_time = round(elapsed_query_time, 4)
     logging.info(f'Query endpoint latency: {elapsed_query_time} seconds')
     
     # ====================================================
@@ -127,7 +127,7 @@ def test_model_index_endpoint(
     )
     end = time.time()
     elapsed_ann_time = end - start
-    elapsed_ann_time = round(elapsed_ann_time, 8)
+    elapsed_ann_time = round(elapsed_ann_time, 4)
     logging.info(f'ANN latency: {elapsed_ann_time} seconds')
     
     
@@ -140,7 +140,7 @@ def test_model_index_endpoint(
     )
     end = time.time()
     elapsed_bf_time = end - start
-    elapsed_bf_time = round(elapsed_bf_time, 8)
+    elapsed_bf_time = round(elapsed_bf_time, 4)
     logging.info(f'Bruteforce latency: {elapsed_bf_time} seconds')
     
     # TODO: write results to file -> GCS
@@ -172,4 +172,4 @@ def test_model_index_endpoint(
     metrics.log_metric("elapsed_query_time", elapsed_query_time)
     metrics.log_metric("elapsed_ann_time", elapsed_ann_time)
     metrics.log_metric("elapsed_bf_time", elapsed_bf_time)
-    metrics.log_metric("Recall", (recall * 100.0))
+    metrics.log_metric("Recall", recall)

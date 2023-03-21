@@ -1,6 +1,6 @@
 merlin-models 
 gcsfs 
-google-cloud-aiplatform>=1.21.0 
+google-cloud-aiplatform>=1.23.0 
 fastapi
 tensorboard-plugin-profile==2.11.1
-google-cloud-aiplatform[cloud_profiler]>=1.21.0
+google-cloud-aiplatform[cloud_profiler]>=1.23.0
