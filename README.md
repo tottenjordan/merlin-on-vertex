@@ -27,11 +27,16 @@ See [this repo](https://github.com/jswortz/spotify_mpd_two_tower/tree/cbbd29fd71
 > * deploy trained query tower to [Vertex AI Prediction](https://cloud.google.com/vertex-ai/docs/predictions/overview) endpoint
 > * [03b-build-docker.ipynb](https://github.com/tottenjordan/merlin-on-vertex/blob/main/03b-build-docker.ipynb) - (optionally) prepare serving application with *docker*
 
-* [04-train-deploy-pipeline.ipynb](https://github.com/tottenjordan/merlin-on-vertex/blob/main/04-train-deploy-pipeline.ipynb) 
+* [04-matching-engine.ipynb](https://github.com/tottenjordan/merlin-on-vertex/blob/main/04-matching-engine.ipynb)
+> * Use candidate embeddings generated from Vertex Train job to create Matching Engine serving index
+> * create and deploy ANN and brute-force indexes
+> * compute recall and retrieval latency
+
+* [05-train-deploy-pipeline.ipynb](https://github.com/tottenjordan/merlin-on-vertex/blob/main/05-train-deploy-pipeline.ipynb) 
 > * orchestrate e2e model training and deployemnt (notebooks 02 and 03)
 > * create candidate index and deploy to index endpoint with [Vertex AI Matching Engine](https://cloud.google.com/vertex-ai/docs/matching-engine/overview)
 
-* [05-recs-for-your-spotify.ipynb](https://github.com/tottenjordan/merlin-on-vertex/blob/main/05-recs-for-your-spotify.ipynb) 
+* [06-recs-for-your-spotify.ipynb](https://github.com/tottenjordan/merlin-on-vertex/blob/main/06-recs-for-your-spotify.ipynb) 
 > * using trained towers and deployed Matching Engine index, generate playlist recommendations for your own (or any public) Spotify playlist(s) 
 
 The Python modules are in the `src` folder:
