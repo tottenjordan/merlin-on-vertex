@@ -119,16 +119,11 @@ def main(args):
     # Set directories
     # ====================================================
     WORKING_DIR_GCS_URI = f'gs://{args.train_output_bucket}/{args.experiment_name}/{args.experiment_run}'
-    # WORKING_DIR_GCS_URI = f'/gcs/{args.train_output_bucket}/{args.experiment_name}/{args.experiment_run}'
     logging.info(f"WORKING_DIR_GCS_URI: {WORKING_DIR_GCS_URI}")
     
     LOGS_DIR = f'{WORKING_DIR_GCS_URI}/tb_logs'
     if 'AIP_TENSORBOARD_LOG_DIR' in os.environ:
         LOGS_DIR=os.environ['AIP_TENSORBOARD_LOG_DIR']
-        # if LOGS_DIR[0:5] == 'gs://':
-        #     LOGS_DIR = LOGS_DIR.replace('gs://', '/gcs/')
-        logging.info(f'AIP_TENSORBOARD_LOG_DIR: {LOGS_DIR}')
-        
     logging.info(f'TensorBoard LOGS_DIR: {LOGS_DIR}')
     
     # ====================================================
@@ -238,9 +233,6 @@ def main(args):
     # Callbacks
     # ====================================================            
     checkpoint_dir=os.environ['AIP_CHECKPOINT_DIR']
-    # if checkpoint_dir[0:5] == 'gs://':
-    #     checkpoint_dir = checkpoint_dir.replace('gs://', '/gcs/')
-    #     logging.info(f'AIP_CHECKPOINT_DIR: {checkpoint_dir}')
     logging.info(f'Saving model checkpoints to {checkpoint_dir}')
     
     # model checkpoints - ModelCheckpoint | BackupAndRestore
@@ -305,8 +297,8 @@ def main(args):
         optimizer=tf.keras.optimizers.Adagrad(args.learning_rate),
         run_eagerly=False,
         metrics=[
-            mm.RecallAt(1), 
-            mm.RecallAt(10), 
+            mm.RecallAt(20), 
+            mm.RecallAt(50), 
             mm.NDCGAt(10)
         ],
     )

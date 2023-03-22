@@ -33,7 +33,7 @@ def convert_parquet_op(
     device_limit_frac: Optional[float] = 0.6,
     device_pool_frac: Optional[float] = 0.9,
     frac_size: Optional[float] = 0.10,
-    memory_limit: Optional[int] = 100_000_000_000
+    memory_limit: Optional[int] = 200_000_000_000
 ):
     '''
     Component to create NVTabular definition.
@@ -56,7 +56,7 @@ def convert_parquet_op(
     device_limit_frac: Optional[float] = 0.6
     device_pool_frac: Optional[float] = 0.9
     frac_size: Optional[float] = 0.10
-    memory_limit: Optional[int] = 100_000_000_000
+    memory_limit: Optional[int] = 200_000_000_000
     '''
     
     # =========================================================
@@ -128,7 +128,7 @@ def analyze_dataset_op(
     device_limit_frac: Optional[float] = 0.6,
     device_pool_frac: Optional[float] = 0.9,
     frac_size: Optional[float] = 0.10,
-    memory_limit: Optional[int] = 100_000_000_000
+    memory_limit: Optional[int] = 200_000_000_000
 ):
     '''
     Component to generate statistics from the dataset.
@@ -205,7 +205,7 @@ def transform_dataset_op(
     device_limit_frac: float = 0.6,
     device_pool_frac: float = 0.9,
     frac_size: float = 0.10,
-    memory_limit: int = 100_000_000_000
+    memory_limit: int = 200_000_000_000
 ):
     """Component to transform a dataset according to the workflow definitions.
     Args:
@@ -299,72 +299,6 @@ def transform_dataset_op(
     create a copy that replaces `gs://` with `/gcs/`
     '''
     logging.info('Generating file list for training...')
-    
-#     # get loca directory
-#     # LOCAL_DIRECTORY = os.getcwd()
-#     LOCAL_DIRECTORY = '/tmp/directory'
-    
-#     # _bucket_name='spotify-merlin-v1' # bucket_data_src
-#     PREFIX = f'nvt-preprocessing-{app}-{version}/nvt-processed/{split}'
-#     FILENAME = '_file_list.txt'
-#     SOURCE_BLOB_NAME = f'{PREFIX}/{FILENAME}'
-#     logging.info(f'SOURCE_BLOB_NAME: {SOURCE_BLOB_NAME}')
-    
-#     # LOCAL_DESTINATION_FILENAME = f'{LOCAL_DIRECTORY}/local_file_list.txt'
-#     LOCAL_DESTINATION_FILENAME = 'local_file_list.txt'
-#     logging.info(f'LOCAL_DESTINATION_FILENAME: {LOCAL_DESTINATION_FILENAME}')
-    
-#     _read_blob_gcs(
-#         bucket_name=bucket_data_output,
-#         source_blob_name=f'{SOURCE_BLOB_NAME}', 
-#         destination_filename=LOCAL_DESTINATION_FILENAME
-#     )
-    
-#     file_list = os.path.join(transformed_dataset.path, '_file_list.txt')
-    
-#     # write new '/gcs/' file
-#     new_lines = []
-#     with open(LOCAL_DESTINATION_FILENAME, 'r') as fp:
-#         lines = fp.readlines()
-#         new_lines.append(lines[0])
-#         for line in lines[1:]:
-#             new_lines.append(line.replace('gs://', '/gcs/'))
-
-#     NEW_LOCAL_FILENAME = f'{LOCAL_DIRECTORY}/_gcs_file_list.txt'
-#     logging.info(f'NEW_LOCAL_FILENAME: {NEW_LOCAL_FILENAME}')
-    
-#     with open(NEW_LOCAL_FILENAME, 'w') as fp:
-#         fp.writelines(new_lines)
-        
-#     GCS_URI_DESTINATION = f'{output_path_transformed_dir}/{split}'
-#     logging.info(f'GCS_URI_DESTINATION: {GCS_URI_DESTINATION}')
-    
-#     _upload_blob_gcs(
-#         gcs_uri=GCS_URI_DESTINATION, 
-#         source_file_name=NEW_LOCAL_FILENAME, 
-#         destination_blob_name='_gcs_file_list.txt'
-#     )
-# logging.info(f'List of /gcs/ file paths uploaded to {GCS_URI_DESTINATION}/_gcs_file_list.txt')
-
-#     file_list_name = '_file_list.txt'
-#     file_list_uri = f'{output_path_transformed_dir}/{split}/{file_list_name}'
-#     logging.info(f'file_list_uri : {file_list_uri}')
-
-#     new_lines = []
-#     with open(file_list_uri, 'r') as fp:
-#         lines = fp.readlines()
-#         new_lines.append(lines[0])
-#         for line in lines[1:]:
-#             new_lines.append(line.replace('gs://', '/gcs/'))
-
-#     gcs_file_list_name = '_gcs_file_list.txt'
-#     gcs_file_list_uri = f'{output_path_transformed_dir}/{split}/{gcs_file_list_name}'
-#     logging.info(f'gcs_file_list_uri : {gcs_file_list_uri}')
-    
-#     with open(gcs_file_list_uri, 'w') as fp:
-#         fp.writelines(new_lines)
-    
-#     logging.info(f'List of /gcs/ file paths uploaded to {gcs_file_list}')
     
     # =========================================================
     #        Saving cardinalities

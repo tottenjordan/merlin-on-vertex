@@ -35,6 +35,50 @@ import tensorflow as tf
 # for running this example on CPU, comment out the line below
 os.environ["TF_GPU_ALLOCATOR"] = "cuda_malloc_async"
 
+# # =============================================
+# # featutres
+# # =============================================
+# item_id = ["track_uri_can"] >> Categorify(dtype="int32") >> TagAsItemID() 
+# playlist_id = ["pid"] >> Categorify(dtype="int32") >> TagAsUserID() 
+
+
+# item_features_cat = [
+#     'artist_name_can',
+#     'track_name_can',
+#     'artist_genres_can',
+# ]
+
+# item_features_cont = [
+#     'duration_ms_can',
+#     'track_pop_can',
+#     'artist_pop_can',
+#     'artist_followers_can',
+# ]
+
+# playlist_features_cat = [
+#     'description_pl',
+#     'name',
+#     'collaborative',
+# ]
+
+# playlist_features_cont = [
+#     'duration_ms_seed_pl',
+#     'n_songs_pl',
+#     'num_artists_pl',
+#     'num_albums_pl',
+# ]
+
+# seq_feats_cat = [
+#     'artist_name_pl',
+#     'track_uri_pl',
+#     'track_name_pl',
+#     'album_name_pl',
+#     'artist_genres_pl',
+# ]
+
+# CAT = playlist_features_cat + item_features_cat
+# CONT = item_features_cont + playlist_features_cont
+
 # =============================================
 # featutres
 # =============================================
@@ -45,7 +89,11 @@ playlist_id = ["pid"] >> Categorify(dtype="int32") >> TagAsUserID()
 item_features_cat = [
     'artist_name_can',
     'track_name_can',
+    'album_name_can',
     'artist_genres_can',
+    'track_key_can',
+    'track_mode_can',
+    'track_time_signature_can'
 ]
 
 item_features_cont = [
@@ -56,16 +104,16 @@ item_features_cont = [
 ]
 
 playlist_features_cat = [
-    'description_pl',
-    'name',
-    'collaborative',
+    # 'description_pl',
+    'pl_name_src',
+    'pl_collaborative_src',
 ]
 
 playlist_features_cont = [
-    'duration_ms_seed_pl',
-    'n_songs_pl',
-    'num_artists_pl',
-    'num_albums_pl',
+    'pl_duration_ms_new',
+    'num_pl_songs_new',
+    'num_pl_artists_new',
+    'num_pl_albums_new',
 ]
 
 seq_feats_cat = [
@@ -74,20 +122,29 @@ seq_feats_cat = [
     'track_name_pl',
     'album_name_pl',
     'artist_genres_pl',
+    'track_key_pl',
+    'track_mode_pl',
+    'track_time_signature_pl'
 ]
+
+# seq_feats_cont = [
+#     'duration_ms_songs_pl',
+#     'artist_pop_pl',
+#     'artists_followers_pl',
+#     'track_pop_pl',
+#     'track_danceability_pl',
+#     'track_energy_pl',
+#     'track_loudness_pl',
+#     'track_acousticness_pl',
+#     'track_instrumentalness_pl',
+#     'track_liveness',
+#     'track_valence_pl',
+#     'track_tempo_pl',
+#     'track_speechiness_pl',
+# ]
 
 CAT = playlist_features_cat + item_features_cat
 CONT = item_features_cont + playlist_features_cont
-
-# item_feature_cat_node = item_features_cat >> nvt.ops.FillMissing()>> Categorify(dtype="int32") >> TagAsItemFeatures()
-
-# item_feature_cont_node =  item_features_cont >> nvt.ops.FillMissing() >>  nvt.ops.Normalize() >> TagAsItemFeatures()
-
-# playlist_feature_cat_node = playlist_features_cat >> nvt.ops.FillMissing() >> Categorify(dtype="int32") >> TagAsUserFeatures() 
-
-# playlist_feature_cont_node = playlist_features_cont >> nvt.ops.FillMissing() >>  nvt.ops.Normalize() >> TagAsUserFeatures()
-
-# playlist_feature_cat_seq_node = seq_feats_cat >> nvt.ops.FillMissing() >> Categorify(dtype="int32") >> TagAsUserFeatures() 
 
 # =============================================
 # create cluster
@@ -179,6 +236,75 @@ def save_dataset(
         conts=continuous_cols,
     )
 
+# # =============================================
+# #            Workflow
+# # =============================================
+# def create_nvt_workflow():
+#     '''
+#     Create a nvt.Workflow definition with transformation all the steps
+#     '''
+#     item_id = ["track_uri_can"] >> Categorify(dtype="int32") >> TagAsItemID() 
+#     playlist_id = ["pid"] >> Categorify(dtype="int32") >> TagAsUserID() 
+
+
+#     item_features_cat = ['artist_name_can',
+#             'track_name_can',
+#             'artist_genres_can',
+#         ]
+
+#     item_features_cont = [
+#             'duration_ms_can',
+#             'track_pop_can',
+#             'artist_pop_can',
+#             'artist_followers_can',
+#         ]
+
+#     playlist_features_cat = [
+#             'description_pl',
+#             'name',
+#             'collaborative',
+#         ]
+
+#     playlist_features_cont = [
+#             'duration_ms_seed_pl',
+#             'n_songs_pl',
+#             'num_artists_pl',
+#             'num_albums_pl',
+#         ]
+
+#     seq_feats_cat = [
+#             'artist_name_pl',
+#             'track_uri_pl',
+#             'track_name_pl',
+#             'album_name_pl',
+#             'artist_genres_pl',
+#         ]
+
+#     CAT = playlist_features_cat + item_features_cat
+#     CONT = item_features_cont + playlist_features_cont
+
+#     item_feature_cat_node = item_features_cat >> nvt.ops.FillMissing()>> Categorify(dtype="int32") >> TagAsItemFeatures()
+
+#     item_feature_cont_node =  item_features_cont >> nvt.ops.FillMissing() >>  nvt.ops.Normalize() >> TagAsItemFeatures()
+
+#     playlist_feature_cat_node = playlist_features_cat >> nvt.ops.FillMissing() >> Categorify(dtype="int32") >> TagAsUserFeatures() 
+
+#     playlist_feature_cont_node = playlist_features_cont >> nvt.ops.FillMissing() >>  nvt.ops.Normalize() >> TagAsUserFeatures()
+
+#     playlist_feature_cat_seq_node = seq_feats_cat >> nvt.ops.FillMissing() >> Categorify(dtype="int32") >> TagAsUserFeatures()
+    
+#     # define a workflow
+#     output = playlist_id + item_id \
+#     + item_feature_cat_node \
+#     + item_feature_cont_node \
+#     + playlist_feature_cat_node \
+#     + playlist_feature_cont_node \
+#     + playlist_feature_cat_seq_node 
+
+#     workflow = nvt.Workflow(output)
+    
+#     return workflow
+
 # =============================================
 #            Workflow
 # =============================================
@@ -190,38 +316,62 @@ def create_nvt_workflow():
     playlist_id = ["pid"] >> Categorify(dtype="int32") >> TagAsUserID() 
 
 
-    item_features_cat = ['artist_name_can',
-            'track_name_can',
-            'artist_genres_can',
-        ]
+    item_features_cat = [
+        'artist_name_can',
+        'track_name_can',
+        'album_name_can',
+        'artist_genres_can',
+        'track_key_can',
+        'track_mode_can',
+        'track_time_signature_can'
+    ]
 
     item_features_cont = [
-            'duration_ms_can',
-            'track_pop_can',
-            'artist_pop_can',
-            'artist_followers_can',
-        ]
+        'duration_ms_can',
+        'track_pop_can',
+        'artist_pop_can',
+        'artist_followers_can',
+    ]
 
     playlist_features_cat = [
-            'description_pl',
-            'name',
-            'collaborative',
-        ]
+        # 'description_pl',
+        'pl_name_src',
+        'pl_collaborative_src',
+    ]
 
     playlist_features_cont = [
-            'duration_ms_seed_pl',
-            'n_songs_pl',
-            'num_artists_pl',
-            'num_albums_pl',
-        ]
+        'pl_duration_ms_new',
+        'num_pl_songs_new',
+        'num_pl_artists_new',
+        'num_pl_albums_new',
+    ]
 
     seq_feats_cat = [
-            'artist_name_pl',
-            'track_uri_pl',
-            'track_name_pl',
-            'album_name_pl',
-            'artist_genres_pl',
-        ]
+        'artist_name_pl',
+        'track_uri_pl',
+        'track_name_pl',
+        'album_name_pl',
+        'artist_genres_pl',
+        'track_key_pl',
+        'track_mode_pl',
+        'track_time_signature_pl'
+    ]
+    
+    # seq_feats_cont = [
+    #     'duration_ms_songs_pl',
+    #     'artist_pop_pl',
+    #     'artists_followers_pl',
+    #     'track_pop_pl',
+    #     'track_danceability_pl',
+    #     'track_energy_pl',
+    #     'track_loudness_pl',
+    #     'track_acousticness_pl',
+    #     'track_instrumentalness_pl',
+    #     'track_liveness',
+    #     'track_valence_pl',
+    #     'track_tempo_pl',
+    #     'track_speechiness_pl',
+    # ]
 
     CAT = playlist_features_cat + item_features_cat
     CONT = item_features_cont + playlist_features_cont
@@ -472,7 +622,7 @@ def parse_args():
         '--memory_limit',
         type=int,
         required=False,
-        default=100_000_000_000
+        default=200_000_000_000
     )
     parser.add_argument(
         '--device_limit_frac',
