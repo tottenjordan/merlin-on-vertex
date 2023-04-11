@@ -15,9 +15,7 @@ from google.cloud import storage
 from google.cloud.storage.bucket import Bucket
 from google.cloud.storage.blob import Blob
 
-
 import glob
-
 
 # GCS_CLIENT = storage.Client()
 
